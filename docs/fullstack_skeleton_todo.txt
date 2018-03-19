@@ -40,10 +40,6 @@ Setting up new Heroku app
 - heroku create
 - add heroku remote
 
-https://afternoon-escarpment-67756.herokuapp.com
-https://git.heroku.com/afternoon-escarpment-67756.git
-
-
 3. Google+ API credentials for BOTH development and production use
 Authorized JavaScript origins
 Authorized redirect URIs
