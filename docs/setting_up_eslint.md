@@ -66,7 +66,7 @@ You should have in client-side *package.json*:
       ...
     }    
 
-###Tweak .eslintrc -files
+### Tweak .eslintrc -files
 
 ####  Indentation (both sides)
 
