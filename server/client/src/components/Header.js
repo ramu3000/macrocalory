@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 class Header extends Component {
   renderContent() {
     switch(this.props.auth) {
-      case null:
-        return;
-      case false:
+    case null:
+      return;
+    case false:
       return (
         <li><a href="/auth/google">Login With Google</a></li>
       );
@@ -23,8 +23,8 @@ class Header extends Component {
       <nav>
         <div>
           <ul>
-          <li><Link to={this.props.auth ? '/dashboard' : '/'}>This is fancy logo in header!</Link></li>
-          {this.renderContent()}
+            <li><Link to={this.props.auth ? '/dashboard' : '/'}>This is fancy logo in header!</Link></li>
+            {this.renderContent()}
           </ul>
         </div>
       </nav>
