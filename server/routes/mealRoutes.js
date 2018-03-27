@@ -84,18 +84,18 @@ module.exports = app => {
         meal.date = date;
         meal.ingredients = ingredients;
         await meal.save();
-        await res.status(200).json({
+        res.status(200).json({
           message: 'Meal with the given id was modified',
           modifiedMeal: meal
         });
       } else {
-        await res.status(404).json({
+        res.status(404).json({
           message: 'Meal with given id does not exist',
           id: id
         });
       }
     } catch (err) {
-      await res.status(500).json({ error: err });
+      res.status(500).json({ error: err });
     }
   });
 
