@@ -1,47 +1,39 @@
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
+const _ = require('lodash');
 
 const Meal = mongoose.model('meals');
 
 module.exports = app => {
   app.get('/api/meals', requireLogin, async (req, res) => {
-    // If the request has both before and after dates,
-    // we return meals between those two dates.
-    // Else we return all of the meals.
+    // before and after are optional params for getting
+    // only meals before or/and after specific date
     try {
-      console.log(req.query);
-      if (req.query.after && req.query.before) {
-        // Get just the meals between date values
-        const before = new Date(req.query.before);
+      const dateQueryParams = {};
+      if (req.query.after) {
         const after = new Date(req.query.after);
-        console.log(before);
-        console.log(after);
-        if (isNaN(before) || isNaN(after)) {
-          //Error, bad values
-          res.status(400).json({
-            error: 'Invalid date arguments'
-          });
-        } else {
-          const meals = await Meal.find({ date: { $gt: after, $lt: before }}).select('-__v -_user');
-          res.status(200).json({
-            count: meals.length,
-            meals: meals
-          });
+        if (!isNaN(after)) {
+          dateQueryParams.$gt = after;
         }
-      } else {
-        //Get all meals
-        const meals = await Meal.find().select('-__v -_user');
-        res.status(200).json({
-          count: meals.length,
-          meals: meals
-        });
       }
+      if (req.query.before) {
+        const before = new Date(req.query.before);
+        if (!isNaN(before)) {
+          dateQueryParams.$lt = before;
+        }
+      }
+      var meals = 0;
+      if (!_.isEmpty(dateQueryParams)) {
+        meals = await Meal.find({date: dateQueryParams}).select('-__v -_user');
+      } else {
+        meals = await Meal.find().select('-__v -_user');
+      }
+      res.status(200).json({
+        count: meals.length,
+        meals: meals
+      });
     } catch (err) {
-      if (err instanceof TypeError) {
-        res.status(500).json({ message: 'CAST ERROR', error: err });
-      } else {
-        res.status(500).json({ error: err });
-      }
+      res.status(500).json({ error: err });
     }
   });
 
