@@ -22,12 +22,11 @@ module.exports = app => {
           dateQueryParams.$lt = before;
         }
       }
-      var meals = 0;
+      const queryParams = { _user: req.user.id };
       if (!_.isEmpty(dateQueryParams)) {
-        meals = await Meal.find({date: dateQueryParams}).select('-__v -_user');
-      } else {
-        meals = await Meal.find().select('-__v -_user');
+        queryParams.date = dateQueryParams;
       }
+      const meals = await Meal.find(queryParams).select('-__v -_user');
       res.status(200).json({
         count: meals.length,
         meals: meals
@@ -60,7 +59,9 @@ module.exports = app => {
   app.get('/api/meals/:mealId', requireLogin, async (req, res) => {
     try {
       const id = req.params.mealId;
-      const meal = await Meal.findById(id).select('-__v -_user');
+      const meal = await Meal.find({ _id: id, _user: req.user.id }).select(
+        '-__v -_user'
+      );
       if (meal) {
         res.status(200).json(meal);
       } else {
@@ -77,7 +78,7 @@ module.exports = app => {
   app.post('/api/meals/:mealId', requireLogin, async (req, res) => {
     try {
       const id = req.params.mealId;
-      const meal = await Meal.findById(id);
+      const meal = await Meal.find({ _id: id, _user: req.user.id });
       const { title, date, ingredients } = req.body;
       if (meal) {
         meal.title = title;
@@ -102,7 +103,7 @@ module.exports = app => {
   app.delete('/api/meals/:mealId', requireLogin, async (req, res) => {
     try {
       const id = req.params.mealId;
-      const meal = await Meal.remove({ _id: id });
+      const meal = await Meal.remove({ _id: id, _user: req.user.id });
       if (meal) {
         res.status(200).json({
           message: 'Meal with the given id was deleted',
