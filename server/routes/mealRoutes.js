@@ -37,10 +37,10 @@ module.exports = app => {
   });
 
   app.post('/api/meals/new', requireLogin, async (req, res) => {
-    const { title, date, ingredients } = req.body;
+    const { name, date, ingredients } = req.body;
     const meal = new Meal({
       _id: new mongoose.Types.ObjectId(),
-      title,
+      name,
       date: date,
       ingredients,
       _user: req.user.id
@@ -59,7 +59,7 @@ module.exports = app => {
   app.get('/api/meals/:mealId', requireLogin, async (req, res) => {
     try {
       const id = req.params.mealId;
-      const meal = await Meal.find({ _id: id, _user: req.user.id }).select(
+      const meal = await Meal.findOne({ _id: id, _user: req.user.id }).select(
         '-__v -_user'
       );
       if (meal) {
@@ -78,16 +78,17 @@ module.exports = app => {
   app.post('/api/meals/:mealId', requireLogin, async (req, res) => {
     try {
       const id = req.params.mealId;
-      const meal = await Meal.find({ _id: id, _user: req.user.id });
-      const { title, date, ingredients } = req.body;
+      const meal = await Meal.findOne({ _id: id, _user: req.user.id });
+      
+      const { name, date, ingredients } = req.body;
       if (meal) {
-        meal.title = title;
+        meal.name = name;
         meal.date = date;
         meal.ingredients = ingredients;
         await meal.save();
         res.status(200).json({
-          message: 'Meal with the given id was modified',
-          modifiedMeal: meal
+          message: 'Meal with the given id was overwritten',
+          overwrittenMeal: meal
         });
       } else {
         res.status(404).json({
