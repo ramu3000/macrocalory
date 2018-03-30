@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
-import { fetchMeals } from '../actions';
 import _ from 'lodash';
 
 class Dashboard extends Component {
@@ -50,4 +49,4 @@ function mapsStateToProps({ meals, date }) {
   return { meals, date };
 }
 
-export default connect(mapsStateToProps, { fetchMeals })(Dashboard);
+export default connect(mapsStateToProps, null)(Dashboard);
