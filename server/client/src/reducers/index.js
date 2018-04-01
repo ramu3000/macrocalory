@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import authReducer from './authReducer';
 import dateReducer from './dateReducer';
 import mealsReducer from './mealsReducer';
@@ -8,5 +9,6 @@ export default combineReducers({
   auth: authReducer,
   date: dateReducer,
   meals: mealsReducer,
-  water: waterReducer
+  water: waterReducer,
+  form: formReducer
 });

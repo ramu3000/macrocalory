@@ -5,7 +5,8 @@ import {
   FETCH_USER,
   CHOOSE_DATE,
   FETCH_MEALS,
-  FETCH_DAILY_WATER
+  FETCH_DAILY_WATER,
+  CREATE_MEAL
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -58,4 +59,8 @@ export const setWater = (date, desiliters) => async dispatch => {
   } catch (err) {
     dispatch({ type: FETCH_DAILY_WATER, payload: null });
   }
+};
+export const createMeal = (values) => async dispatch => {
+  const res = await axios.post('/api/meals/new', values);
+  dispatch({type:CREATE_MEAL, payload: res.data});
 };

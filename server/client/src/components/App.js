@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import Dashboard from '../components/Dashboard';
 
+
+import Dashboard from '../components/Dashboard';
 import Header from './Header';
+import FoodNew from './FoodNew';
+
 const Landing = () => <h2>This is Landing!</h2>;
 
 class App extends Component {
@@ -21,6 +24,7 @@ class App extends Component {
             <Header />
             <Route exact={true} path="/" component={Landing} />
             <Route exact={true} path="/dashboard" component={Dashboard} />
+            <Route exact={true} path="/food/new" component={FoodNew} />
           </div>
         </BrowserRouter>
       </div>
