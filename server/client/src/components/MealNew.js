@@ -76,9 +76,15 @@ class FoodNew extends Component {
       </div>
     );
   }
+  formatTime(time,date){
+    let newTime = moment(date, 'ddd MMM D YYYY HH:mm:ss ZZ');
+    let formTime = (time).split(':');
+    newTime.set({h: formTime[0], m: formTime[1]}).toDate();
+    return newTime;
+  }
 
   onSubmit(values){
-    values.date = this.props.date;
+    values.date = this.formatTime(values.time, moment(this.props.date));
     console.log(values);
     this.props.createMeal(values, () => {
       this.props.history.push('/dashboard');
@@ -89,9 +95,6 @@ class FoodNew extends Component {
   render(){
     const { handleSubmit, pristine, reset, submitting } = this.props;
 
-    const time = moment(this.props.date).format();
-    const newTime = moment(time).hour(5).minute(30);
-    console.log('oldtime',time,'newtime', newTime);
     return (
       <div>
         <Link className="btn btn-primary" to="/dashboard">go back</Link>
@@ -127,15 +130,15 @@ class FoodNew extends Component {
 }
 
 function validate(values){
-  console.log(values);
 
+  const time = values.time ? values.time.split(':') : null;
   //values -> {mealname: 'asdfasd', food: 'asdfasdf'}
   const errors = {}; 
   //validate the inputs
   if(!values.name){
     errors.name = 'Enter a Meal name';
   }
-  if(!values.time){
+  if(!time){
     errors.time = 'add time';
   }
   //return empty object means no errors and form is valid
