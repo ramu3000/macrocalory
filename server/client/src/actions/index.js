@@ -60,7 +60,9 @@ export const setWater = (date, desiliters) => async dispatch => {
     dispatch({ type: FETCH_DAILY_WATER, payload: null });
   }
 };
-export const createMeal = (values) => async dispatch => {
+
+export const createMeal = (values, callback) => async dispatch => {
   const res = await axios.post('/api/meals/new', values);
+  callback();
   dispatch({type:CREATE_MEAL, payload: res.data});
 };

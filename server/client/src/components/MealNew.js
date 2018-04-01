@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createMeal } from '../actions';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 
 class FoodNew extends Component {
@@ -9,7 +11,8 @@ class FoodNew extends Component {
   //field parameter handles all events properties for Field component
   renderField(field) {
     const { meta: { touched, error } } = field;
-    const className = `form-group ${ touched && error ? ' has-error' : ''} `;
+    const colSize =  field.size ? field.size: '';
+    const className = `form-group ${colSize} ${ touched && error ? ' has-error' : ''} `;
     
     return (
       <div className={className}>
@@ -63,6 +66,7 @@ class FoodNew extends Component {
                     placeholder="type an ingredient"
                     component={this.renderField}
                     label="Ingredient"
+                    size="col-xs-12" //bootstrap size 
                   />
                 </div>
               </div>
@@ -76,28 +80,45 @@ class FoodNew extends Component {
   onSubmit(values){
     values.date = this.props.date;
     console.log(values);
-    this.props.createMeal(values);
+    this.props.createMeal(values, () => {
+      this.props.history.push('/dashboard');
+    });
 
   }
   
   render(){
     const { handleSubmit, pristine, reset, submitting } = this.props;
 
+    const time = moment(this.props.date).format();
+    const newTime = moment(time).hour(5).minute(30);
+    console.log('oldtime',time,'newtime', newTime);
     return (
       <div>
+        <Link className="btn btn-primary" to="/dashboard">go back</Link>
         <h2>Add food</h2>
         <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
-          <Field 
-            name="name"
-            label="Meal name"
-            component={this.renderField}
-          />
+          <div className="row">
+            <Field 
+              name="name"
+              label="Meal name"
+              component={this.renderField}
+              size="col-xs-6"
+            />
+            <Field 
+              name="time"
+              label="Meal time"
+              placeholder="12:00"
+              component={this.renderField}
+              size="col-xs-2"
+            />
+          </div>
           <FieldArray name="ingredients" component={this.renderIngredients.bind(this)} />
           <div className="form__actions">
-            <button type="submit" className="btn btn-primary">Save your meal</button>
+            <button type="submit" className="btn btn-success">Save your meal</button>
             <button type="button" className="btn btn-danger" disabled={pristine || submitting} onClick={reset}>
               Clear Values
             </button>
+
           </div>
         </form>
       </div>
@@ -106,13 +127,17 @@ class FoodNew extends Component {
 }
 
 function validate(values){
+  console.log(values);
+
   //values -> {mealname: 'asdfasd', food: 'asdfasdf'}
   const errors = {}; 
   //validate the inputs
   if(!values.name){
     errors.name = 'Enter a Meal name';
   }
-
+  if(!values.time){
+    errors.time = 'add time';
+  }
   //return empty object means no errors and form is valid
   return errors;
 }
@@ -126,5 +151,6 @@ export default reduxForm({
   // a unique name for the form
   form: 'foodForm'
 })(
+  //and add redux connection
   connect(mapsStateToProps, {createMeal})(FoodNew)
 );

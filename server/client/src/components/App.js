@@ -6,7 +6,7 @@ import * as actions from '../actions';
 
 import Dashboard from '../components/Dashboard';
 import Header from './Header';
-import FoodNew from './FoodNew';
+import MealNew from './MealNew';
 
 const Landing = () => <h2>This is Landing!</h2>;
 
@@ -24,7 +24,7 @@ class App extends Component {
             <Header />
             <Route exact={true} path="/" component={Landing} />
             <Route exact={true} path="/dashboard" component={Dashboard} />
-            <Route exact={true} path="/food/new" component={FoodNew} />
+            <Route exact={true} path="/food/new" component={MealNew} />
           </div>
         </BrowserRouter>
       </div>

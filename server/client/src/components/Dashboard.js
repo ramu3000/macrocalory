@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
+import { Link } from 'react-router-dom';
 
 class Dashboard extends Component {
 
@@ -71,6 +72,9 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
+        <div>
+          <Link className="btn btn-primary" to="/food/new">Add meal</Link>
+        </div>
         {this.renderDate()}
         {this.renderMeals()}
         {this.renderWater()}
