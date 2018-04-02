@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { createMeal } from '../actions';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+
 
 
 class FoodNew extends Component {
@@ -79,13 +81,30 @@ class FoodNew extends Component {
   formatTime(time,date){
     let newTime = moment(date, 'ddd MMM D YYYY HH:mm:ss ZZ');
     let formTime = (time).split(':');
-    newTime.set({h: formTime[0], m: formTime[1]}).toDate();
-    return newTime;
+    newTime.set({h: formTime[0], m: formTime[1]});
+    return newTime.toDate();
+  }
+  addFatsecretValues() {
+    //dummy values for now
+    //Placeholder for values that fatsecret gives
+    return {
+      mass: 100, //grams
+      kcal: 200, //     
+      protein: .5, //grams
+      carbohydrate:  40, //grams
+      fat: 20.12
+    };
   }
 
   onSubmit(values){
     values.date = this.formatTime(values.time, moment(this.props.date));
-    console.log(values);
+
+    let newValues =_.map(values.ingredients, ingredient => {
+      const obj = {};
+      _.merge(obj,ingredient,this.addFatsecretValues());
+      return obj;
+    });
+    values.ingredients = newValues;
     this.props.createMeal(values, () => {
       this.props.history.push('/dashboard');
     });
@@ -94,7 +113,6 @@ class FoodNew extends Component {
   
   render(){
     const { handleSubmit, pristine, reset, submitting } = this.props;
-
     return (
       <div>
         <Link className="btn btn-primary" to="/dashboard">go back</Link>
@@ -130,7 +148,7 @@ class FoodNew extends Component {
 }
 
 function validate(values){
-
+  console.log(values);
   const time = values.time ? values.time.split(':') : null;
   //values -> {mealname: 'asdfasd', food: 'asdfasdf'}
   const errors = {}; 
@@ -138,8 +156,8 @@ function validate(values){
   if(!values.name){
     errors.name = 'Enter a Meal name';
   }
-  if(!time){
-    errors.time = 'add time';
+  if(!time || time.length !=2 ){
+    errors.time = 'add time or add time HH:MM';
   }
   //return empty object means no errors and form is valid
   return errors;
