@@ -51,7 +51,7 @@ class FoodNew extends Component {
             <li key={index}>
               <h4>Ingredient #{index + 1}</h4>
               <div className="row">
-                <div className="col-sm-3">
+                <div className="col-sm-2">
                   <button
                     className="btn btn-danger remove-ingredient"
                     type="button"
@@ -61,14 +61,22 @@ class FoodNew extends Component {
                   X
                   </button>
                 </div>
-                <div className="col-sm-9">
+                <div className="col-sm-10">
                   <Field
                     name={`${ingredient}.name`}
                     type="text"
                     placeholder="type an ingredient"
                     component={this.renderField}
                     label="Ingredient"
-                    size="col-xs-12" //bootstrap size 
+                    size="col-xs-8" //bootstrap size 
+                  />
+                  <Field
+                    name={`${ingredient}.mass`}
+                    type="text"
+                    placeholder="100"
+                    component={this.renderField}
+                    label="Määrä grammoissa tai millilitroissa "
+                    size="col-xs-4" //bootstrap size 
                   />
                 </div>
               </div>
@@ -88,7 +96,6 @@ class FoodNew extends Component {
     //dummy values for now
     //Placeholder for values that fatsecret gives
     return {
-      mass: 100, //grams
       kcal: 200, //     
       protein: .5, //grams
       carbohydrate:  40, //grams
@@ -156,8 +163,28 @@ function validate(values){
   if(!values.name){
     errors.name = 'Enter a Meal name';
   }
-  if(!time || time.length !=2 ){
+  if(!time || time.length !==2 ){
     errors.time = 'add time or add time HH:MM';
+  }
+
+  if (!values.ingredients || !values.ingredients.length) {
+    errors.ingredients = { _error: 'At least one ingredient must be entered' };
+  } else {
+    const ingredientsArrayErrors = [];
+    values.ingredients.forEach((ingredient, ingredientIndex) => {
+      const ingredientErrors = {};
+      if (!ingredient || !ingredient.name) {
+        ingredientErrors.name = 'Required';
+        ingredientsArrayErrors[ingredientIndex] = ingredientErrors;
+      }
+      if (!ingredient || !ingredient.mass) {
+        ingredientErrors.mass = 'Required';
+        ingredientsArrayErrors[ingredientIndex] = ingredientErrors;
+      }
+    });
+    if (ingredientsArrayErrors.length) {
+      errors.ingredients = ingredientsArrayErrors;
+    }
   }
   //return empty object means no errors and form is valid
   return errors;
