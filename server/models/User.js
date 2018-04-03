@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  googleId: String
+  googleId: String,
+  _water: { type: Schema.Types.ObjectId , ref: 'Water', required: true }
 });
 
 

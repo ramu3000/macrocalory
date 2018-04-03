@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const keys = require('../config/keys');
 
 const User = mongoose.model('users');
+const Water = mongoose.model('waters');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -29,8 +30,16 @@ passport.use(
       if (existingUser) {
         return done(null, existingUser);
       }
-
-      const user = await new User({ googleId: profile.id }).save();
+      const newWaterId = new mongoose.mongo.ObjectID();
+      const user = await new User({
+        googleId: profile.id,
+        _water: newWaterId
+      }).save();
+      await new Water({
+        _id: newWaterId,
+        _user: user._id,
+        dailyWaters: []
+      }).save();
       done(null, user);
     }
   )
