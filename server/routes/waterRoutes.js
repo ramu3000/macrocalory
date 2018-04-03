@@ -10,10 +10,14 @@ module.exports = app => {
       const water = await Water.findOne({ _user: req.user.id }).select(
         '-__v -_user'
       );
-
-      if (water) {
-        res.status(200).json(water);
+      if (!water) {
+        // Problems... DB should always have this document for the user
+        return res
+          .status(500)
+          .json({ error: 'No water document for the user!!!' });
       }
+
+      return res.status(200).json(water);
     } catch (err) {
       return res.status(500).json({ error: err });
     }
@@ -45,11 +49,9 @@ module.exports = app => {
       });
 
       if (dailyWater == null) {
-        return res
-          .status(404)
-          .json({ message: 'No water record with given day', day });
+        return res.status(404).json({ message: 'No water saved for given day', day });
       }
-
+      
       return res.status(200).json(dailyWater);
     } catch (err) {
       return res.status(500).json({ error: err });
@@ -89,20 +91,14 @@ module.exports = app => {
           desiliters: desiliters
         });
         await water.save();
-      
-        return res
-          .status(200)
-          .json({ message: 'Saved new daily water'});
+
+        return res.status(200).json({ message: 'Saved new daily water' });
       } else {
         // We overwrite the subdocument
         dailyWater.desiliters = desiliters;
         await water.save();
-        return res
-          .status(200)
-          .json({ message: 'Updated daily water'});
-                
+        return res.status(200).json({ message: 'Updated daily water' });
       }
-
     } catch (err) {
       return res.status(500).json({ error: err });
     }
