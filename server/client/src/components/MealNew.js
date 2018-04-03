@@ -112,6 +112,7 @@ class FoodNew extends Component {
       return obj;
     });
     values.ingredients = newValues;
+    //send to action
     this.props.createMeal(values, () => {
       this.props.history.push('/dashboard');
     });
@@ -155,9 +156,7 @@ class FoodNew extends Component {
 }
 
 function validate(values){
-  console.log(values);
   const time = values.time ? values.time.split(':') : null;
-  //values -> {mealname: 'asdfasd', food: 'asdfasdf'}
   const errors = {}; 
   //validate the inputs
   if(!values.name){
@@ -174,11 +173,11 @@ function validate(values){
     values.ingredients.forEach((ingredient, ingredientIndex) => {
       const ingredientErrors = {};
       if (!ingredient || !ingredient.name) {
-        ingredientErrors.name = 'Required';
+        ingredientErrors.name = 'please fill the ingredient name';
         ingredientsArrayErrors[ingredientIndex] = ingredientErrors;
       }
       if (!ingredient || !ingredient.mass) {
-        ingredientErrors.mass = 'Required';
+        ingredientErrors.mass = 'please fill mass of ingredient';
         ingredientsArrayErrors[ingredientIndex] = ingredientErrors;
       }
     });
