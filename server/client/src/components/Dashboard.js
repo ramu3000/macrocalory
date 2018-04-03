@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
+import DailyWater from './DailyWater';
 
 class Dashboard extends Component {
 
@@ -59,11 +60,20 @@ class Dashboard extends Component {
     );
   }
 
+  renderWater() {
+    return (
+      <div>
+        <DailyWater/>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div>
         {this.renderDate()}
         {this.renderMeals()}
+        {this.renderWater()}
       </div>
     );
   }
