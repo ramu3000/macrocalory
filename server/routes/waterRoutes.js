@@ -28,7 +28,7 @@ module.exports = app => {
       const day = req.params.day;
       if (!moment(day, 'YYYY-MM-DD', true).isValid()) {
         return res.status(400).json({
-          message:
+          error:
             'Illegal day param. Use strictly format YYYY-MM-DD with no time.',
           day: day
         });
@@ -49,9 +49,10 @@ module.exports = app => {
       });
 
       if (dailyWater == null) {
-        return res.status(404).json({ message: 'No water saved for given day', day });
+        // If there is no dailyWater-document, we respond with zero
+        return res.status(200).json({ date: day, desiliters: 0 });
       }
-      
+
       return res.status(200).json(dailyWater);
     } catch (err) {
       return res.status(500).json({ error: err });
@@ -63,11 +64,17 @@ module.exports = app => {
       const day = req.params.day;
       if (!moment(day, 'YYYY-MM-DD', true).isValid()) {
         return res.status(400).json({
-          message:
+          error:
             'Illegal day param. Use strictly format YYYY-MM-DD with no time.',
           day: day
         });
       }
+      if (req.body.desiliters < 0) {
+        return res.status(400).json({
+          error: 'Illegal desiliters param. Must be non-negative.'
+        });
+      }
+
       const water = await Water.findOne({ _user: req.user.id }).select(
         '-__v -_user'
       );
@@ -94,8 +101,13 @@ module.exports = app => {
 
         return res.status(200).json({ message: 'Saved new daily water' });
       } else {
-        // We overwrite the subdocument
-        dailyWater.desiliters = desiliters;
+        if (desiliters === 0) {
+          // If desiliters is zero, we remove the document
+          water.dailyWaters.id(dailyWater._id).remove();
+        } else {
+          // We overwrite the subdocument
+          dailyWater.desiliters = desiliters;
+        }
         await water.save();
         return res.status(200).json({ message: 'Updated daily water' });
       }
