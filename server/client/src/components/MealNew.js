@@ -89,7 +89,7 @@ class FoodNew extends Component {
   formatTime(time,date){
     let newTime = moment(date, 'ddd MMM D YYYY HH:mm:ss ZZ');
     let formTime = (time).split(':');
-    newTime.set({h: formTime[0], m: formTime[1]});
+    newTime.set({h: formTime[0], m: formTime[1], s: 0});
     return newTime.toDate();
   }
   addFatsecretValues() {
