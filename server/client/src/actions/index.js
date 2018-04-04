@@ -39,7 +39,7 @@ export const fetchMeals = date => async dispatch => {
 export const fetchDailyWater = date => async dispatch => {
   // Use moment to get string representing day in local time
   const day = moment(date).format('YYYY-MM-DD');
-  const url = 'api/water/' + day;
+  const url = '/api/water/' + day;
   try {
     const res = await axios.get(url);
     dispatch({ type: FETCH_DAILY_WATER, payload: res.data.desiliters });
@@ -51,7 +51,7 @@ export const fetchDailyWater = date => async dispatch => {
 export const setWater = (date, desiliters) => async dispatch => {
   // Use moment to get string representing day in local time
   const day = moment(date).format('YYYY-MM-DD');
-  const url = 'api/water/' + day;
+  const url = '/api/water/' + day;
   const body = { desiliters };
   try {
     await axios.post(url, body);
