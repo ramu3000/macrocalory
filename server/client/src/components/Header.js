@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import 'react-day-picker/lib/style.css';
-import {
-  Button,
-  Grid,
-  Row,
-  Col,
-  Image,
-  Panel
-} from 'react-bootstrap';
+import { Button, Grid, Row, Col, Image, Panel } from 'react-bootstrap';
 import { fetchMeals } from '../actions';
 import DatePicker from './DatePicker';
 
 class Header extends Component {
-  
   renderAuthButtons() {
     switch (this.props.auth) {
       case null:
@@ -37,6 +29,16 @@ class Header extends Component {
         );
     }
   }
+  renderDatePicker() {
+    switch (this.props.auth) {
+      case null:
+        return;
+      case false:
+        return;
+      default:
+        return <DatePicker />;
+    }
+  }
 
   render() {
     return (
@@ -49,10 +51,9 @@ class Header extends Component {
               </Link>
             </Col>
             <Col lg={7} sm={7} md={7} xs={7}>
-              <DatePicker />
+              {this.renderDatePicker()}
             </Col>
-            <Col>
-            </Col>
+            <Col />
             <Col lg={3} sm={3} md={3} xs={3}>
               {this.renderAuthButtons()}
             </Col>

@@ -5,14 +5,14 @@ import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
+import Forbidden from './Forbidden';
+
 
 class Dashboard extends Component {
-
   editMeal(meal) {
     // Call action to edit meal - sets 'current_meal', redirects to edit view?
-    // 
     console.log('TODO: Editing meal with id ' + meal._id);
-  } 
+  }
 
   deleteMeal(meal) {
     // Call action to make API-request to delete this meal
@@ -28,7 +28,7 @@ class Dashboard extends Component {
   renderMealRow(meal) {
     const timeStr = moment(meal.date).format('HH:mm:ss');
     return (
-      <Row className='meal-panel'>
+      <Row className="meal-panel">
         <Col lg={2} sm={2} md={2} xs={2}>
           {timeStr}
         </Col>
@@ -64,27 +64,35 @@ class Dashboard extends Component {
   renderWater() {
     return (
       <div>
-        <DailyWater/>
+        <DailyWater />
       </div>
     );
   }
 
   render() {
-    return (
-      <div>
+    if (this.props.auth === null) {
+      return null;
+    } else if (this.props.auth === false) {
+      return <Forbidden />;
+    } else {
+      return (
         <div>
-          <Link className="btn btn-primary" to="/food/new">Add meal</Link>
+          <div>
+            <Link className="btn btn-primary" to="/food/new">
+              Add meal
+            </Link>
+          </div>
+          {this.renderDate()}
+          {this.renderMeals()}
+          {this.renderWater()}
         </div>
-        {this.renderDate()}
-        {this.renderMeals()}
-        {this.renderWater()}
-      </div>
-    );
+      );
+    }
   }
 }
 
-function mapsStateToProps({ meals, date }) {
-  return { meals, date };
+function mapsStateToProps({ meals, date, auth }) {
+  return { meals, date, auth };
 }
 
 export default connect(mapsStateToProps, null)(Dashboard);

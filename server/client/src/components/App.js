@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
 
 import Dashboard from '../components/Dashboard';
 import Header from './Header';
@@ -22,9 +21,12 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Header />
-            <Route exact={true} path="/" component={Landing} />
-            <Route exact={true} path="/dashboard" component={Dashboard} />
-            <Route exact={true} path="/food/new" component={MealNew} />
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/food/new" component={MealNew} />
+              <Route path="/" render={() => <Redirect to="/" />} />
+            </Switch>
           </div>
         </BrowserRouter>
       </div>

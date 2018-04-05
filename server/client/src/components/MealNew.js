@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { createMeal } from '../actions';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import Forbidden from './Forbidden';
 
 
 
@@ -117,9 +118,15 @@ class FoodNew extends Component {
       this.props.history.push('/dashboard');
     });
 
+
   }
   
   render(){
+    if (this.props.auth === null) {
+      return null;
+    } else if (this.props.auth === false) {
+      return <Forbidden />;
+    }
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
       <div>
@@ -189,8 +196,8 @@ function validate(values){
   return errors;
 }
 //getting props to this component
-function mapsStateToProps({ date }) {
-  return {  date };
+function mapsStateToProps({ date, auth }) {
+  return {  date, auth };
 }
 
 export default reduxForm({
