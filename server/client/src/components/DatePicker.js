@@ -4,14 +4,14 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
-import { chooseDate, fetchMeals, fetchDailyWater } from '../actions';
+import { chooseDate, fetchDailyMeals, fetchDailyWater } from '../actions';
 
 class DatePicker extends Component {
   async chooseDate(date) {
     // When typing on date picker bar, it generates undefined values
     if (!(date === undefined)) {
       await this.props.chooseDate(date);
-      await this.props.fetchMeals(this.props.date);
+      await this.props.fetchDailyMeals(this.props.date);
       await this.props.fetchDailyWater(this.props.date);
     }
   }
@@ -57,6 +57,6 @@ function mapsStateToProps({ date }) {
   return { date };
 }
 
-export default connect(mapsStateToProps, { chooseDate, fetchMeals, fetchDailyWater })(
+export default connect(mapsStateToProps, { chooseDate, fetchDailyMeals, fetchDailyWater })(
   DatePicker
 );

@@ -1,10 +1,13 @@
-import { FETCH_MEALS, CREATE_MEAL } from '../actions/types';
+import { FETCH_DAILY_MEALS } from '../actions/types';
 
-export default function(state = { count: 0 }, action) {
+// This reducer is setting meals for one day.
+// We don't handle actions creating or deleting meals right now,
+// because we cannot be sure that the new created or deleted
+// meal was part of that days meals.
+
+export default function(state = [], action) {
   switch (action.type) {
-    case FETCH_MEALS:
-      return action.payload;
-    case CREATE_MEAL:
+    case FETCH_DAILY_MEALS:
       return action.payload;
     default:
       return state;

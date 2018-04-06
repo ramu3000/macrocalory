@@ -5,14 +5,15 @@ import {
   CHECKING_AUTHENTICATION,
   USER_DATA,
   CHOOSE_DATE,
-  FETCH_MEALS,
+  FETCH_DAILY_MEALS,
   FETCH_DAILY_WATER,
-  CREATE_MEAL
+  CREATE_MEAL,
+  DELETE_MEAL
 } from './types';
 
 export const fetchUser = () => async dispatch => {
   dispatch({ type: CHECKING_AUTHENTICATION });
-  
+
   const res = await axios.get('/api/current_user');
 
   dispatch({ type: USER_DATA, payload: res.data });
@@ -22,7 +23,7 @@ export const chooseDate = date => dispatch => {
   dispatch({ type: CHOOSE_DATE, payload: date });
 };
 
-export const fetchMeals = date => async dispatch => {
+export const fetchDailyMeals = date => async dispatch => {
   const startOfDay = moment(date)
     .startOf('day')
     .toDate();
@@ -36,7 +37,16 @@ export const fetchMeals = date => async dispatch => {
     endOfDay.toISOString();
   const res = await axios.get(url);
 
-  dispatch({ type: FETCH_MEALS, payload: res.data });
+  dispatch({ type: FETCH_DAILY_MEALS, payload: res.data.meals });
+};
+
+export const deleteMeal = mealId => async dispatch => {
+  try {
+    await axios.delete('/api/meals/' + mealId);
+    dispatch({ type: DELETE_MEAL, payload: mealId });
+  } catch (err) {
+    dispatch({ type: DELETE_MEAL, payload: null });
+  }
 };
 
 export const fetchDailyWater = date => async dispatch => {
@@ -65,7 +75,11 @@ export const setWater = (date, desiliters) => async dispatch => {
 };
 
 export const createMeal = (values, callback) => async dispatch => {
-  const res = await axios.post('/api/meals/new', values);
-  callback();
-  dispatch({type:CREATE_MEAL, payload: res.data});
+  try {
+    const res = await axios.post('/api/meals/new', values);
+    callback();
+    dispatch({ type: CREATE_MEAL, payload: res.data.createdMeal });
+  } catch (err) {
+    dispatch({ type: CREATE_MEAL, payload: null });
+  }
 };

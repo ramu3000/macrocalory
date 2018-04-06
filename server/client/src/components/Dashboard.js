@@ -5,11 +5,11 @@ import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
-import { fetchMeals, fetchDailyWater } from '../actions';
+import { fetchDailyMeals, fetchDailyWater, deleteMeal } from '../actions';
 
 class Dashboard extends Component {
   componentDidMount() {
-    this.props.fetchMeals(this.props.date);
+    this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
   }
   editMeal(meal) {
@@ -17,10 +17,9 @@ class Dashboard extends Component {
     console.log('TODO: Editing meal with id ' + meal._id);
   }
 
-  deleteMeal(meal) {
-    // Call action to make API-request to delete this meal
-    // If successful, either remove meal from props or fetch daily meals anew
-    console.log('TODO: Deleting meal with id ' + meal._id);
+  async deleteMeal(meal) {
+    await this.props.deleteMeal(meal._id);
+    await this.props.fetchDailyMeals(this.props.date);
   }
 
   renderDate() {
@@ -54,9 +53,9 @@ class Dashboard extends Component {
   renderMeals() {
     return (
       <div>
-        <h3>{this.props.meals.count} meals on this day</h3>
+        <h3>{this.props.meals.length} meals on this day</h3>
         <Grid>
-          {_.map(_.sortBy(this.props.meals.meals, ['date']), meal => {
+          {_.map(_.sortBy(this.props.meals, ['date']), meal => {
             return <Panel key={meal._id}>{this.renderMealRow(meal)}</Panel>;
           })}
         </Grid>
@@ -92,6 +91,8 @@ function mapsStateToProps({ meals, date }) {
   return { meals, date };
 }
 
-export default connect(mapsStateToProps, { fetchMeals, fetchDailyWater })(
-  Dashboard
-);
+export default connect(mapsStateToProps, {
+  fetchDailyMeals,
+  fetchDailyWater,
+  deleteMeal
+})(Dashboard);
