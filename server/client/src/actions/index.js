@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 
 import {
-  FETCH_USER,
+  CHECKING_AUTHENTICATION,
+  USER_DATA,
   CHOOSE_DATE,
   FETCH_MEALS,
   FETCH_DAILY_WATER,
@@ -10,9 +11,11 @@ import {
 } from './types';
 
 export const fetchUser = () => async dispatch => {
+  dispatch({ type: CHECKING_AUTHENTICATION });
+  
   const res = await axios.get('/api/current_user');
 
-  dispatch({ type: FETCH_USER, payload: res.data });
+  dispatch({ type: USER_DATA, payload: res.data });
 };
 
 export const chooseDate = date => dispatch => {

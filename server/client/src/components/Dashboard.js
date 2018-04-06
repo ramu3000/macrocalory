@@ -5,8 +5,6 @@ import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
-import Forbidden from './Forbidden';
-
 
 class Dashboard extends Component {
   editMeal(meal) {
@@ -70,29 +68,23 @@ class Dashboard extends Component {
   }
 
   render() {
-    if (this.props.auth === null) {
-      return null;
-    } else if (this.props.auth === false) {
-      return <Forbidden />;
-    } else {
-      return (
+    return (
+      <div>
         <div>
-          <div>
-            <Link className="btn btn-primary" to="/food/new">
-              Add meal
-            </Link>
-          </div>
-          {this.renderDate()}
-          {this.renderMeals()}
-          {this.renderWater()}
+          <Link className="btn btn-primary" to="/food/new">
+            Add meal
+          </Link>
         </div>
-      );
-    }
+        {this.renderDate()}
+        {this.renderMeals()}
+        {this.renderWater()}
+      </div>
+    );
   }
 }
 
-function mapsStateToProps({ meals, date, auth }) {
-  return { meals, date, auth };
+function mapsStateToProps({ meals, date }) {
+  return { meals, date };
 }
 
 export default connect(mapsStateToProps, null)(Dashboard);

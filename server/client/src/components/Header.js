@@ -8,35 +8,33 @@ import DatePicker from './DatePicker';
 
 class Header extends Component {
   renderAuthButtons() {
-    switch (this.props.auth) {
-      case null:
-        return;
-      case false:
-        return (
-          <a href="/auth/google">
-            <Button className="btn_header" bsStyle="success">
-              Google Login
-            </Button>
-          </a>
-        );
-      default:
-        return (
-          <a href="/api/logout">
-            <Button className="btn_header" bsStyle="danger">
-              Logout
-            </Button>
-          </a>
-        );
+    if (this.props.auth.isLoading === true) {
+      return null;
+    } else if (this.props.auth.data === '') {
+      return (
+        <a href="/auth/google">
+          <Button className="btn_header" bsStyle="success">
+            Google Login
+          </Button>
+        </a>
+      );
+    } else {
+      return (
+        <a href="/api/logout">
+          <Button className="btn_header" bsStyle="danger">
+            Logout
+          </Button>
+        </a>
+      );
     }
   }
   renderDatePicker() {
-    switch (this.props.auth) {
-      case null:
-        return;
-      case false:
-        return;
-      default:
-        return <DatePicker />;
+    if (this.props.auth.isLoading) {
+      return null;
+    } else if (this.props.auth.data === '') {
+      return null;
+    } else {
+      return <DatePicker />;
     }
   }
 
@@ -46,7 +44,7 @@ class Header extends Component {
         <Grid>
           <Row className="show-grid">
             <Col lg={2} sm={2} md={2} xs={2}>
-              <Link to={this.props.auth ? '/dashboard' : '/'}>
+              <Link to={this.props.auth.data !== '' ? '/dashboard' : '/'}>
                 <Image src="/images/KR_logo.png" alt="KR-Logo" thumbnail />
               </Link>
             </Col>

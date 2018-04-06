@@ -2,17 +2,43 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 
-import Dashboard from '../components/Dashboard';
+import DashboardComponent from '../components/Dashboard';
 import Header from './Header';
-import MealNew from './MealNew';
+import MealNewComponent from './MealNew';
 
 const Landing = () => <h2>This is Landing!</h2>;
+
+const LoadingSpinner = () => <h2>Checking authentication...</h2>;
+
+const userIsAuthenticated = connectedRouterRedirect({
+  redirectPath: '/',
+  authenticatedSelector: state => state.auth.data !== '',
+  wrapperDisplayName: 'UserIsAuthenticated',
+  // Returns true if the user auth state is loading
+  authenticatingSelector: state => state.auth.isLoading,
+  // Render this component when the authenticatingSelector returns true
+  AuthenticatingComponent: LoadingSpinner
+});
+
+const Dashboard = userIsAuthenticated(DashboardComponent);
+const MealNew = userIsAuthenticated(MealNewComponent);
 
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
     this.props.chooseDate(Date.now());
+  }
+
+  isLoggedIn() {
+    if (this.props.auth === null) {
+      return false;
+    } else if (this.props.auth === false) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   render() {
@@ -34,4 +60,7 @@ class App extends Component {
   }
 }
 
-export default connect(null, actions)(App);
+function mapsStateToProps({ auth }) {
+  return { auth };
+}
+export default connect(mapsStateToProps, actions)(App);
