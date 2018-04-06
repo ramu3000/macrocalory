@@ -79,7 +79,7 @@ module.exports = app => {
     try {
       const id = req.params.mealId;
       const meal = await Meal.findOne({ _id: id, _user: req.user.id });
-      
+
       const { name, date, ingredients } = req.body;
       if (meal) {
         meal.name = name;
@@ -104,15 +104,15 @@ module.exports = app => {
   app.delete('/api/meals/:mealId', requireLogin, async (req, res) => {
     try {
       const id = req.params.mealId;
-      const meal = await Meal.remove({ _id: id, _user: req.user.id });
-      if (meal) {
-        res.status(200).json({
-          message: 'Meal with the given id was deleted',
+      const meal = await Meal.findOneAndRemove({ _id: id, _user: req.user.id });
+      if (!meal) {
+        return res.status(404).json({
+          message: 'Meal with given id does not exist',
           id: id
         });
       } else {
-        res.status(404).json({
-          message: 'Meal with given id does not exist',
+        return res.status(200).json({
+          message: 'Meal with the given id was deleted',
           id: id
         });
       }
