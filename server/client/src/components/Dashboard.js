@@ -56,7 +56,7 @@ class Dashboard extends Component {
       <div>
         <h3>{this.props.meals.count} meals on this day</h3>
         <Grid>
-          {_.map(this.props.meals.meals, meal => {
+          {_.map(_.sortBy(this.props.meals.meals, ['date']), meal => {
             return <Panel key={meal._id}>{this.renderMealRow(meal)}</Panel>;
           })}
         </Grid>
