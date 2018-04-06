@@ -1,6 +1,8 @@
 import { CHOOSE_DATE } from '../actions/types';
 
-export default function(state = null, action) {
+const initialState = new Date();
+
+export default function(state = initialState, action) {
   switch (action.type) {
     case CHOOSE_DATE:
       return action.payload;

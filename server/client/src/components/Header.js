@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import 'react-day-picker/lib/style.css';
 import { Button, Grid, Row, Col, Image, Panel } from 'react-bootstrap';
-import { fetchMeals } from '../actions';
 import DatePicker from './DatePicker';
 
 class Header extends Component {
@@ -66,4 +65,4 @@ function mapsStateToProps({ auth, date }) {
   return { auth, date };
 }
 
-export default connect(mapsStateToProps, { fetchMeals })(Header);
+export default connect(mapsStateToProps, null)(Header);

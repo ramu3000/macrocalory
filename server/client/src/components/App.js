@@ -28,7 +28,6 @@ const MealNew = userIsAuthenticated(MealNewComponent);
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
-    this.props.chooseDate(Date.now());
   }
 
   isLoggedIn() {

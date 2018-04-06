@@ -5,8 +5,13 @@ import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
+import { fetchMeals, fetchDailyWater } from '../actions';
 
 class Dashboard extends Component {
+  componentDidMount() {
+    this.props.fetchMeals(this.props.date);
+    this.props.fetchDailyWater(this.props.date);
+  }
   editMeal(meal) {
     // Call action to edit meal - sets 'current_meal', redirects to edit view?
     console.log('TODO: Editing meal with id ' + meal._id);
@@ -87,4 +92,6 @@ function mapsStateToProps({ meals, date }) {
   return { meals, date };
 }
 
-export default connect(mapsStateToProps, null)(Dashboard);
+export default connect(mapsStateToProps, { fetchMeals, fetchDailyWater })(
+  Dashboard
+);
