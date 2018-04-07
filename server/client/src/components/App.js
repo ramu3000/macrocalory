@@ -7,8 +7,7 @@ import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 import DashboardComponent from '../components/Dashboard';
 import Header from './Header';
 import MealNewComponent from './MealNew';
-
-const Landing = () => <h2>This is Landing!</h2>;
+import Landing from './Landing';
 
 const LoadingSpinner = () => <h2>Checking authentication...</h2>;
 
