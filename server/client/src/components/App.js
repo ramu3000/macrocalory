@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Route,  Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
@@ -8,6 +8,7 @@ import MealsComponent from '../components/Meals';
 import Header from './Header';
 import MealNewComponent from './MealNew';
 import Landing from './Landing';
+import MealEditComponent from './MealEdit';
 
 const LoadingSpinner = () => <h2>Checking authentication...</h2>;
 
@@ -23,6 +24,7 @@ const userIsAuthenticated = connectedRouterRedirect({
 
 const Meals = userIsAuthenticated(MealsComponent);
 const MealNew = userIsAuthenticated(MealNewComponent);
+const MealEdit = userIsAuthenticated(MealEditComponent);
 
 class App extends Component {
   componentDidMount() {
@@ -50,6 +52,7 @@ class App extends Component {
               <Route exact path="/meals" component={Meals} />
               <Route exact path="/meals/new" component={MealNew} />
               <Route path="/" render={() => <Redirect to="/" />} />
+              <Route exact path="/food/edit/:id" component={MealEdit} />
             </Switch>
           </div>
         </BrowserRouter>

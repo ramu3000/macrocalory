@@ -8,7 +8,8 @@ import {
   FETCH_DAILY_MEALS,
   FETCH_DAILY_WATER,
   CREATE_MEAL,
-  DELETE_MEAL
+  DELETE_MEAL,
+  FETCH_MEAL,
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -38,6 +39,12 @@ export const fetchDailyMeals = date => async dispatch => {
   const res = await axios.get(url);
 
   dispatch({ type: FETCH_DAILY_MEALS, payload: res.data.meals });
+};
+
+export const fetchMeal = mealId => async dispatch => {
+  const res = await axios.get(`/api/meals/${mealId}`);
+
+  dispatch({type: FETCH_MEAL, payload: res.data})
 };
 
 export const deleteMeal = mealId => async dispatch => {
