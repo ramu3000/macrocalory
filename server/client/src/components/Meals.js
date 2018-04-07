@@ -88,7 +88,7 @@ class Meals extends Component {
             return this.renderMealPanel(meal);
           })}
           <Link to="/meals/new">
-            <Panel fluid bsStyle="success">
+            <Panel bsStyle="success">
               <Panel.Heading>
                 <Panel.Title componentClass="h1" align="center">
                   Click here to add new meal!
