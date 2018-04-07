@@ -38,14 +38,22 @@ class DatePicker extends Component {
       : '';
     return (
       <div>
-        <Button onClick={this.decrementDate.bind(this)} className="datepicker">
+        <Button
+          bsSize="small"
+          onClick={this.decrementDate.bind(this)}
+          className="btn-datepicker"
+        >
           -
         </Button>
         <DayPickerInput
           value={dateStr}
           onDayChange={this.chooseDate.bind(this)}
         />
-        <Button onClick={this.incrementDate.bind(this)} className="datepicker">
+        <Button
+          bsSize="small"
+          onClick={this.incrementDate.bind(this)}
+          className="btn-datepicker"
+        >
           +
         </Button>
       </div>
@@ -57,6 +65,8 @@ function mapsStateToProps({ date }) {
   return { date };
 }
 
-export default connect(mapsStateToProps, { chooseDate, fetchDailyMeals, fetchDailyWater })(
-  DatePicker
-);
+export default connect(mapsStateToProps, {
+  chooseDate,
+  fetchDailyMeals,
+  fetchDailyWater
+})(DatePicker);
