@@ -67,7 +67,7 @@ class Header extends Component {
             {this.renderAuthNav()}
           </Navbar.Collapse>
         </Navbar>
-        <Grid>
+        <Grid fluid>
           <Row>
             <Col xs={12} sm={6} smPush={3} align="center">
               {this.renderDatePicker()}

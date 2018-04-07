@@ -24,40 +24,80 @@ class Meals extends Component {
 
   renderDate() {
     const dateString = moment(this.props.date).format('ddd, DD of MMM YYYY');
-    return <h2>{dateString}</h2>;
+    return <h3>{dateString}</h3>;
   }
 
-  renderMealRow(meal) {
-    const timeStr = moment(meal.date).format('HH:mm:ss');
+  renderIngredientRow(ingredient) {
     return (
-      <Row className="meal-panel">
-        <Col lg={2} sm={2} md={2} xs={2}>
-          {timeStr}
-        </Col>
-        <Col lg={2} sm={2} md={2} xs={2}>
-          {meal.name}
-        </Col>
-        <Col lg={4} sm={4} md={4} xs={4}>
-          <Panel bsStyle="danger">EMPTY FILLER COLUMN</Panel>
-        </Col>
-        <Col lg={2} sm={2} md={2} xs={2}>
-          <Button onClick={() => this.editMeal(meal)}>Edit</Button>
-        </Col>
-        <Col lg={2} sm={2} md={2} xs={2}>
-          <Button onClick={() => this.deleteMeal(meal)}>Delete</Button>
-        </Col>
+      <Row key={ingredient._id}>
+        <Col xs={2} />
+        <Col xs={7}>{ingredient.name}</Col>
+        <Col xs={3}>{ingredient.mass}g</Col>
       </Row>
+    );
+  }
+  renderMealPanel(meal) {
+    const timeStr = moment(meal.date).format('HH:mm');
+    return (
+      <Panel fluid key={meal._id} bsStyle="success">
+        <Panel.Heading>
+          <Row key={meal._id}>
+            <Col xs={2}>{timeStr}</Col>
+            <Panel.Toggle>
+              <Col xs={7}>{meal.name}</Col>
+            </Panel.Toggle>
+            <Col xs={1}>
+              <Button
+                className="btn-meal-list"
+                bsStyle="success"
+                bsSize="xsmall"
+                onClick={() => this.editMeal(meal)}
+              >
+                Edit
+              </Button>
+            </Col>
+            <Col align="center" xs={2}>
+              <Button
+                className="btn-meal-list"
+                bsStyle="danger"
+                bsSize="xsmall"
+                onClick={() => this.deleteMeal(meal)}
+              >
+                Delete
+              </Button>
+            </Col>
+          </Row>
+        </Panel.Heading>
+        <Panel.Collapse>
+          <Panel.Body>
+            {_.map(_.sortBy(meal.ingredients, ['name']), ingredient => {
+              return this.renderIngredientRow(ingredient);
+            })}
+          </Panel.Body>
+        </Panel.Collapse>
+      </Panel>
     );
   }
 
   renderMeals() {
     return (
       <div>
-        <h3>{this.props.meals.length} meals on this day</h3>
-        <Grid>
+        <h4>Meals: {this.props.meals.length} meals today</h4>
+        <Grid fluid>
           {_.map(_.sortBy(this.props.meals, ['date']), meal => {
-            return <Panel key={meal._id}>{this.renderMealRow(meal)}</Panel>;
+            return this.renderMealPanel(meal);
           })}
+          <Panel fluid bsStyle="success">
+            <Panel.Heading>
+              <Row>
+                <Col align="center" xsOffset={10} xs={2}>
+                  <Link className="btn btn-success btn-xs" to="/meals/new">
+                    Add meal
+                  </Link>
+                </Col>
+              </Row>
+            </Panel.Heading>
+          </Panel>
         </Grid>
       </div>
     );
@@ -74,11 +114,6 @@ class Meals extends Component {
   render() {
     return (
       <div>
-        <div>
-          <Link className="btn btn-primary" to="/meals/new">
-            Add meal
-          </Link>
-        </div>
         {this.renderDate()}
         {this.renderMeals()}
         {this.renderWater()}

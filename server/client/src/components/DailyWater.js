@@ -15,17 +15,17 @@ class DailyWater extends Component {
   render() {
     return (
       <div>
-        <h3>Daily water: {this.props.water} desiliters</h3>
+        <h4>Water: {(this.props.water / 10).toFixed(1)} liters today</h4>
         <Button
           disabled={this.props.water <= 0}
-          bsStyle="primary"
+          bsStyle="info"
           className="water"
           onClick={this.subDesiLiter.bind(this)}
         >
           -
         </Button>
         <Button
-          bsStyle="primary"
+          bsStyle="info"
           className="water"
           onClick={this.addDesiLiter.bind(this)}
         >
