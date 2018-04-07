@@ -87,17 +87,15 @@ class Meals extends Component {
           {_.map(_.sortBy(this.props.meals, ['date']), meal => {
             return this.renderMealPanel(meal);
           })}
-          <Panel fluid bsStyle="success">
-            <Panel.Heading>
-              <Row>
-                <Col align="center" xsOffset={10} xs={2}>
-                  <Link className="btn btn-success btn-xs" to="/meals/new">
-                    Add meal
-                  </Link>
-                </Col>
-              </Row>
-            </Panel.Heading>
-          </Panel>
+          <Link to="/meals/new">
+            <Panel fluid bsStyle="success">
+              <Panel.Heading>
+                <Panel.Title componentClass="h1" align="center">
+                  Click here to add new meal!
+                </Panel.Title>
+              </Panel.Heading>
+            </Panel>
+          </Link>
         </Grid>
       </div>
     );
