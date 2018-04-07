@@ -43,7 +43,7 @@ class Header extends Component {
     return (
       <Nav>
         {this.isLoggedIn() ? (
-          <NavItem componentClass={Link} href="/dashboard" to="/dashboard">
+          <NavItem componentClass={Link} href="/meals" to="/meals">
             My Meals
           </NavItem>
         ) : null}
@@ -56,7 +56,7 @@ class Header extends Component {
         <Navbar collapseOnSelect fluid>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to={this.isLoggedIn() ? '/dashboard' : '/'}>
+              <Link to={this.isLoggedIn() ? '/meals' : '/'}>
                 KaloriRaptorit
               </Link>
             </Navbar.Brand>
@@ -73,7 +73,7 @@ class Header extends Component {
               {this.renderDatePicker()}
             </Col>
             <Col xs={12} sm={3} smPull={6} align="center">
-              COLUMN FOR BUTTON BAR???
+              {/*Placeholder for button panel column?*/}
             </Col>
           </Row>
         </Grid>

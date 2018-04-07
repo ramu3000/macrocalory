@@ -7,7 +7,7 @@ import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
 import { fetchDailyMeals, fetchDailyWater, deleteMeal } from '../actions';
 
-class Dashboard extends Component {
+class Meals extends Component {
   componentDidMount() {
     this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
@@ -75,7 +75,7 @@ class Dashboard extends Component {
     return (
       <div>
         <div>
-          <Link className="btn btn-primary" to="/food/new">
+          <Link className="btn btn-primary" to="/meals/new">
             Add meal
           </Link>
         </div>
@@ -95,4 +95,4 @@ export default connect(mapsStateToProps, {
   fetchDailyMeals,
   fetchDailyWater,
   deleteMeal
-})(Dashboard);
+})(Meals);

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 
-import DashboardComponent from '../components/Dashboard';
+import MealsComponent from '../components/Meals';
 import Header from './Header';
 import MealNewComponent from './MealNew';
 import Landing from './Landing';
@@ -21,7 +21,7 @@ const userIsAuthenticated = connectedRouterRedirect({
   AuthenticatingComponent: LoadingSpinner
 });
 
-const Dashboard = userIsAuthenticated(DashboardComponent);
+const Meals = userIsAuthenticated(MealsComponent);
 const MealNew = userIsAuthenticated(MealNewComponent);
 
 class App extends Component {
@@ -47,8 +47,8 @@ class App extends Component {
             <Header />
             <Switch>
               <Route exact path="/" component={Landing} />
-              <Route exact path="/dashboard" component={Dashboard} />
-              <Route exact path="/food/new" component={MealNew} />
+              <Route exact path="/meals" component={Meals} />
+              <Route exact path="/meals/new" component={MealNew} />
               <Route path="/" render={() => <Redirect to="/" />} />
             </Switch>
           </div>

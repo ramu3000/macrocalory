@@ -8,7 +8,7 @@ import moment from 'moment';
 
 
 
-class FoodNew extends Component {
+class MealNew extends Component {
 
   //field parameter handles all events properties for Field component
   renderField(field) {
@@ -114,7 +114,7 @@ class FoodNew extends Component {
     values.ingredients = newValues;
     //send to action
     this.props.createMeal(values, () => {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/meals');
     });
 
 
@@ -124,8 +124,8 @@ class FoodNew extends Component {
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
       <div>
-        <Link className="btn btn-primary" to="/dashboard">go back</Link>
-        <h2>Add food</h2>
+        <Link className="btn btn-primary" to="/meals">go back</Link>
+        <h2>Add a new meal</h2>
         <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
           <div className="row">
             <Field 
@@ -197,8 +197,8 @@ function mapsStateToProps({ date }) {
 export default reduxForm({
   validate,
   // a unique name for the form
-  form: 'foodForm'
+  form: 'mealForm'
 })(
   //and add redux connection
-  connect(mapsStateToProps, {createMeal})(FoodNew)
+  connect(mapsStateToProps, {createMeal})(MealNew)
 );
