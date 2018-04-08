@@ -51,8 +51,8 @@ class App extends Component {
               <Route exact path="/" component={Landing} />
               <Route exact path="/meals" component={Meals} />
               <Route exact path="/meals/new" component={MealNew} />
+              <Route exact path="/meals/edit/:id" component={MealEdit} />
               <Route path="/" render={() => <Redirect to="/" />} />
-              <Route exact path="/food/edit/:id" component={MealEdit} />
             </Switch>
           </div>
         </BrowserRouter>

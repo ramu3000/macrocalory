@@ -15,7 +15,7 @@ class Meals extends Component {
   editMeal(meal) {
     // Call action to edit meal - sets 'current_meal', redirects to edit view?
     console.log('TODO: Editing meal with id ' + meal._id);
-    this.props.history.push(`food/edit/${meal._id}`);
+    this.props.history.push(`meals/edit/${meal._id}`);
   }
 
   async deleteMeal(meal) {
