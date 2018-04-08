@@ -1,5 +1,9 @@
 body {
-  background: rgb(207, 255, 225);
+  background: linear-gradient(
+    to right,
+    rgb(99, 170, 126),
+    rgb(207, 255, 225)
+  );
 }
 form button {
   margin-left: 5px;
@@ -8,15 +12,15 @@ form button:first-of-type {
   margin-left: 0;
 }
 .remove-ingredient {
-  margin-top:20px;
+  margin-top: 20px;
 }
 .form__subtitle {
-  margin-top:0;
+  margin-top: 0;
 }
 .form__actions {
-  margin-top:40px;
+  margin-top: 40px;
   border-top: 5px solid rgb(255, 255, 255);
-  padding-top:40px;
+  padding-top: 40px;
 }
 
 form ul {

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import 'react-day-picker/lib/style.css';
 import { Navbar, Nav, NavItem, Col, Row, Grid } from 'react-bootstrap';
 import DatePicker from './DatePicker';
+import '../css/navbar.css';
 
 class Header extends Component {
   isLoggedIn() {
