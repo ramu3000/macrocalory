@@ -44,9 +44,9 @@ class Meals extends Component {
           <Row key={meal._id}>
             <Col xs={2}>{timeStr}</Col>
             <Panel.Toggle>
-              <Col xs={7}>{meal.name}</Col>
+              <Col xs={6}>{meal.name}</Col>
             </Panel.Toggle>
-            <Col xs={1}>
+            <Col xs={4} align="right">
               <Button
                 className="btn-meal-list"
                 bsStyle="success"
@@ -55,8 +55,6 @@ class Meals extends Component {
               >
                 Edit
               </Button>
-            </Col>
-            <Col align="center" xs={2}>
               <Button
                 className="btn-meal-list"
                 bsStyle="danger"
