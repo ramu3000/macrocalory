@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
 import { fetchMeal } from '../actions';
 import moment from 'moment';
 
