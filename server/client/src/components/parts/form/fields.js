@@ -1,7 +1,10 @@
 import React from 'react';
 import { Field } from 'redux-form';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import moment from 'moment';
+import { DateTimePicker } from 'react-widgets';
+import momentLocaliser from 'react-widgets-moment';
+import 'react-widgets/dist/css/react-widgets.css'
+momentLocaliser(moment)
 
 //field parameter handles all events properties for Field component
 export const renderField = function (field) {
@@ -23,9 +26,6 @@ export const renderField = function (field) {
   );
 };
 
-function handleChange (date) {
-  this.props.input.onChange(moment(date).format('YYYY-MM-DD'))
-}
 
 export const renderDateField = function (field) {
   const { meta: { touched, error } } = field;
@@ -35,12 +35,11 @@ export const renderDateField = function (field) {
   return (
     <div className={className}>
       <label>{field.label}</label>
-      <DayPickerInput
-        {...field.input} 
-        placeholder={field.placeholder}
-        dateFormat="YYYY-MM-DD"
-        selected={field.input.value ? moment(field.input.value, 'YYYY-MM-DD') : null}
-        onChange={handleChange}
+      <DateTimePicker
+        onChange={field.input.onChange}
+        format="YYYY-MM-DD HH:MM"
+        time={field.showTime}
+        value={!field.input.value ? null : new Date(field.input.value)}
       />
     
       <div className="help-block">{touched ? error: ''}</div>

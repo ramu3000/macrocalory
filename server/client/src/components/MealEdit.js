@@ -17,9 +17,7 @@ class MealEdit extends Component {
     if(!value){
       return value;
     }
-    
-    console.log(value,name);
-    const dateStr = moment(value).isValid() ? moment(value).format('YYYY-MM-DD'): value;
+    const dateStr = moment(value).isValid() ? moment(value).format('YYYY-MM-DD HH:MM'): value;
     return dateStr;
   }
     
@@ -28,10 +26,11 @@ class MealEdit extends Component {
       return <div></div>;
     } 
     const { handleSubmit, pristine, reset, submitting } = this.props;
+    console.log(this.props)
     return (
       <div>
-        <Link className="btn btn-primary" to="/dashboard">go back</Link>
-        <h2>Edit food</h2>
+        <Link className="btn btn-primary" to="/meals">go back</Link>
+        <h2>Edit your Meal - {this.props.meals.name}</h2>
         <form onSubmit={handleSubmit}>
           <div className="row">
             <Field 
@@ -42,18 +41,12 @@ class MealEdit extends Component {
             />
             <Field 
               name="date"
-              label="date"
+              label="Date & Time"
               placeholder="YYYY-MM-DD"
               component={renderDateField}
-              size="col-xs-4"
+              size="col-xs-3"
               format={this.formatDate}
-            />
-            <Field 
-              name="time"
-              label="Meal time"
-              placeholder="12:00"
-              component={renderField}
-              size="col-xs-2"
+              showTime={true}
             />
           </div>
           <FieldArray name="ingredients" component={renderIngredients} />
@@ -71,7 +64,7 @@ class MealEdit extends Component {
 }
 
 function mapsStateToProps({ meals, date, ownProps }) {
-  return { initialValues: meals, date, ownProps };
+  return { initialValues: meals, meals, date, ownProps };
 }
 
 let InitializeFromStateForm = reduxForm({
