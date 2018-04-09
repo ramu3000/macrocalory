@@ -40,7 +40,7 @@ class Meals extends Component {
   renderMealPanel(meal) {
     const timeStr = moment(meal.date).format('HH:mm');
     return (
-      <Panel fluid key={meal._id} bsStyle="success">
+      <Panel key={meal._id} bsStyle="success">
         <Panel.Heading>
           <Row key={meal._id}>
             <Col xs={2}>{timeStr}</Col>
