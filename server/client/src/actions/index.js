@@ -10,6 +10,8 @@ import {
   CREATE_MEAL,
   DELETE_MEAL,
   FETCH_MEAL,
+  CLEAR_TRENDS_DATA,
+  FETCH_TRENDS_WATER_DATA
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -44,7 +46,7 @@ export const fetchDailyMeals = date => async dispatch => {
 export const fetchMeal = mealId => async dispatch => {
   const res = await axios.get(`/api/meals/${mealId}`);
 
-  dispatch({type: FETCH_MEAL, payload: res.data})
+  dispatch({ type: FETCH_MEAL, payload: res.data });
 };
 
 export const deleteMeal = mealId => async dispatch => {
@@ -89,4 +91,18 @@ export const createMeal = (values, callback) => async dispatch => {
   } catch (err) {
     dispatch({ type: CREATE_MEAL, payload: null });
   }
+};
+
+export const fetchTrendsWater = () => async dispatch => {
+  const url = '/api/water';
+  try {
+    const res = await axios.get(url);
+    dispatch({ type: FETCH_TRENDS_WATER_DATA, payload: res.data.dailyWaters });
+  } catch (err) {
+    dispatch({ type: FETCH_TRENDS_WATER_DATA, payload: [] });
+  }
+};
+
+export const clearTrendsData = () => dispatch => {
+  dispatch({ type: CLEAR_TRENDS_DATA, payload: {} });
 };

@@ -6,3 +6,5 @@ export const FETCH_DAILY_WATER = 'fetch_daily_water';
 export const CREATE_MEAL = 'create_meal';
 export const DELETE_MEAL = 'delete_meal';
 export const FETCH_MEAL = 'fetch_meal';
+export const CLEAR_TRENDS_DATA = 'clear_trends_data';
+export const FETCH_TRENDS_WATER_DATA = 'fetch_trends_water_data';

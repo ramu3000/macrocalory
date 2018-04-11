@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import connect from 'react-redux/lib/connect/connect';
 import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { clearTrendsData, fetchTrendsWater } from '../actions';
 
-class TrendsSettingsGroup extends React.Component {
+class Trends extends Component {
   constructor(props) {
     super(props);
 
@@ -15,17 +16,25 @@ class TrendsSettingsGroup extends React.Component {
     };
   }
 
+  componentWillMount() {
+    this.props.clearTrendsData();
+  }
+
   handleChange(e) {
     this.setState({ value: e });
   }
 
-  createTrends() {
-    if (this.state.value.length === 0) {
-      return null;
+  updateTrendsData() {
+    // TODO: This must be changed quite a bit (and actions and reducers also)
+    // - Now we get
+    // -- All the water data (without start and end dates)
+    // --- (We filter dates when handling the data! - Water API does not support interval!)
+    // -- Nothing but the water data
+    if (this.state.value.length !== 0) {
+      this.props.fetchTrendsWater();
     }
   }
-
-  render() {
+  renderFetchControls() {
     return (
       <div>
         <ToggleButtonGroup
@@ -33,15 +42,23 @@ class TrendsSettingsGroup extends React.Component {
           value={this.state.value}
           onChange={this.handleChange}
         >
-          <ToggleButton value="protein">Protein</ToggleButton>
-          <ToggleButton value="carbohydrate">Carbohydrate</ToggleButton>
-          <ToggleButton value="fat">Fat</ToggleButton>
-          <ToggleButton value="energy">Energy</ToggleButton>
+          <ToggleButton value="protein" disabled>
+            Protein
+          </ToggleButton>
+          <ToggleButton value="carbohydrate" disabled>
+            Carbohydrate
+          </ToggleButton>
+          <ToggleButton value="fat" disabled>
+            Fat
+          </ToggleButton>
+          <ToggleButton value="energy" disabled>
+            Energy
+          </ToggleButton>
           <ToggleButton value="water">Water</ToggleButton>
         </ToggleButtonGroup>
         <Button
           bsStyle="primary"
-          onClick={this.createTrends.bind(this)}
+          onClick={this.updateTrendsData.bind(this)}
           disabled={this.state.value.length === 0}
         >
           GO!
@@ -49,16 +66,14 @@ class TrendsSettingsGroup extends React.Component {
       </div>
     );
   }
-}
-
-class Trends extends Component {
   render() {
-    return (
-      <div>
-        <TrendsSettingsGroup />
-      </div>
-    );
+    return <div>{this.renderFetchControls()}</div>;
   }
 }
 
-export default connect(null, null)(Trends);
+function mapStateToProps({ trends }) {
+  return { trends };
+}
+export default connect(mapStateToProps, { clearTrendsData, fetchTrendsWater })(
+  Trends
+);
