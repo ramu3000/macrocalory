@@ -1,7 +1,6 @@
 import { CLEAR_TRENDS_DATA, FETCH_TRENDS_WATER_DATA } from '../actions/types';
 
 const initialValue = {
-  water: []
 };
 
 export default function(state = initialValue, action) {

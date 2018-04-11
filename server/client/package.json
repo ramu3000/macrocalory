@@ -14,6 +14,7 @@
     "axios": "^0.18.0",
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
+    "moment-iterator": "^1.0.8",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-date-range": "^0.9.4",
