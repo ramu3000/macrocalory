@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import 'react-day-picker/lib/style.css';
-import { Navbar, Nav, NavItem, Col, Row, Grid } from 'react-bootstrap';
-import DatePicker from './DatePicker';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import '../css/navbar.css';
 
 class Header extends Component {
@@ -33,12 +32,6 @@ class Header extends Component {
       </Nav>
     );
   }
-  renderDatePicker() {
-    if (this.isLoggedIn()) {
-      return <DatePicker />;
-    }
-    return null;
-  }
 
   renderFeaturesNav() {
     return (
@@ -53,32 +46,18 @@ class Header extends Component {
   }
   render() {
     return (
-      <div>
-        <Navbar collapseOnSelect fluid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to={this.isLoggedIn() ? '/meals' : '/'}>
-                KaloriRaptorit
-              </Link>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            {this.renderFeaturesNav()}
-            {this.renderAuthNav()}
-          </Navbar.Collapse>
-        </Navbar>
-        <Grid fluid>
-          <Row>
-            <Col xs={12} sm={6} smPush={3} align="center">
-              {this.renderDatePicker()}
-            </Col>
-            <Col xs={12} sm={3} smPull={6} align="center">
-              {/*Placeholder for button panel column?*/}
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+      <Navbar collapseOnSelect fluid>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to={this.isLoggedIn() ? '/meals' : '/'}>KaloriRaptorit</Link>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          {this.renderFeaturesNav()}
+          {this.renderAuthNav()}
+        </Navbar.Collapse>
+      </Navbar>
     );
   }
 }

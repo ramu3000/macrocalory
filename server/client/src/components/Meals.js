@@ -6,6 +6,7 @@ import _ from 'lodash';
 import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
 import { fetchDailyMeals, fetchDailyWater, deleteMeal } from '../actions';
+import DatePicker from './DatePicker';
 
 class Meals extends Component {
   componentDidMount() {
@@ -13,8 +14,6 @@ class Meals extends Component {
     this.props.fetchDailyWater(this.props.date);
   }
   editMeal(meal) {
-    // Call action to edit meal - sets 'current_meal', redirects to edit view?
-    console.log('TODO: Editing meal with id ' + meal._id);
     this.props.history.push(`meals/edit/${meal._id}`);
   }
 
@@ -25,9 +24,13 @@ class Meals extends Component {
 
   renderDate() {
     const dateString = moment(this.props.date).format('ddd, DD of MMM YYYY');
-    return <h3>{dateString}</h3>;
+    return (
+      <div>
+        <DatePicker />
+        <h3>{dateString}</h3>
+      </div>
+    );
   }
-
   renderIngredientRow(ingredient) {
     return (
       <Row key={ingredient._id}>
