@@ -12,6 +12,8 @@ import {
   YAxis,
   ResponsiveContainer
 } from 'recharts';
+import { Panel } from 'react-bootstrap';
+import { DateRange } from 'react-date-range';
 
 const WATER = 'water';
 const CARBOHYDRATE = 'carbohydrate';
@@ -26,7 +28,7 @@ class Trends extends Component {
     this.handleChange = this.handleChange.bind(this);
 
     this.state = {
-      startDate: new Date('2018-01-15T00:00:00'),
+      startDate: new Date('2018-02-25T00:00:00'),
       endDate: new Date(),
       value: []
     };
@@ -42,11 +44,9 @@ class Trends extends Component {
 
   updateTrendsData() {
     // 1. WATER
-    // - TODO: This must be changed quite a bit (and actions and reducers also)
-    // - Now we get
-    // -- All the water data (without start and end dates)
-    // --- (We filter dates when handling the data! - Water API does not support interval!)
-    // -- Nothing but the water data
+    // Ok, we are a little bit restricted by our backend API now.
+    // We can only get ALL water data for our user (without start and end dates)
+    // This data does not contain zero-water-dates
     if (
       this.state.value.find(e => {
         return e === WATER;
@@ -83,7 +83,13 @@ class Trends extends Component {
   }
 
   renderCharts() {
-    if (this.props.trends.water !== undefined) {
+    //TODO: Here somehow render  conditionally different lines
+    if (
+      this.props.trends.water !== undefined &&
+      this.state.value.find(e => {
+        return e === WATER;
+      })
+    ) {
       const waterChartData = this.buildWaterChartData(this.props.trends.water);
       return (
         <ResponsiveContainer width="100%" aspect={2}>
@@ -101,43 +107,63 @@ class Trends extends Component {
     }
   }
 
+  handleSelect(range) {
+    this.props.clearTrendsData();
+    this.setState({ startDate: range.startDate.toDate() });
+    this.setState({ endDate: range.endDate.toDate() });
+  }
+
   renderFetchControls() {
     return (
-      <div>
-        <ToggleButtonGroup
-          type="checkbox"
-          value={this.state.value}
-          onChange={this.handleChange}
-        >
-          <ToggleButton value={PROTEIN} disabled>
-            Protein
-          </ToggleButton>
-          <ToggleButton value={CARBOHYDRATE} disabled>
-            Carbohydrate
-          </ToggleButton>
-          <ToggleButton value={FAT} disabled>
-            Fat
-          </ToggleButton>
-          <ToggleButton value={ENERGY} disabled>
-            Energy
-          </ToggleButton>
-          <ToggleButton value={WATER}>Water</ToggleButton>
-        </ToggleButtonGroup>
-        <Button
-          bsStyle="primary"
-          onClick={this.updateTrendsData.bind(this)}
-          // disabled={this.state.value.length === 0}
-        >
-          GO!
-        </Button>
-      </div>
+      <Panel>
+        <Panel.Heading>
+          <ToggleButtonGroup
+            vertical
+            bsSize="xsmall"
+            type="checkbox"
+            value={this.state.value}
+            onChange={this.handleChange}
+          >
+            <ToggleButton value={PROTEIN} disabled>
+              Protein
+            </ToggleButton>
+            <ToggleButton value={CARBOHYDRATE} disabled>
+              Carbohydrate
+            </ToggleButton>
+            <ToggleButton value={FAT} disabled>
+              Fat
+            </ToggleButton>
+            <ToggleButton value={ENERGY} disabled>
+              Energy
+            </ToggleButton>
+            <ToggleButton value={WATER}>Water</ToggleButton>
+          </ToggleButtonGroup>
+          <Button
+            bsStyle="primary"
+            onClick={this.updateTrendsData.bind(this)}
+            disabled={this.state.value.length === 0}
+          >
+            GO!
+          </Button>
+          <Panel.Toggle>Choose date range</Panel.Toggle>
+        </Panel.Heading>
+        <Panel.Collapse>
+          <Panel.Body>
+            <DateRange
+              onInit={this.handleSelect.bind(this)}
+              onChange={this.handleSelect.bind(this)}
+            />
+          </Panel.Body>
+        </Panel.Collapse>
+      </Panel>
     );
   }
+
   render() {
     return (
       <div>
         <div>{this.renderFetchControls()}</div>
-        <div> {this.renderCharts()}</div>
+        <div>{this.renderCharts()}</div>
       </div>
     );
   }
