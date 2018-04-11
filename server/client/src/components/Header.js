@@ -41,6 +41,11 @@ class Header extends Component {
             My Meals
           </NavItem>
         ) : null}
+        {this.isLoggedIn() ? (
+          <NavItem componentClass={Link} href="/trends" to="/trends">
+            My Trends
+          </NavItem>
+        ) : null}
       </Nav>
     );
   }
