@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import connect from 'react-redux/lib/connect/connect';
 import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import { clearTrendsData, fetchTrendsWater } from '../actions';
+import _ from 'lodash';
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ResponsiveContainer
+} from 'recharts';
 
 class Trends extends Component {
   constructor(props) {
@@ -34,6 +43,33 @@ class Trends extends Component {
       this.props.fetchTrendsWater();
     }
   }
+
+  renderChart() {
+    if (this.props.trends.water.length === 0) {
+      return null;
+    }
+    var data = [];
+
+    const waters = this.props.trends.water;
+
+    _.map(_.sortBy(waters, '[date]'), water => {
+      data.push({ name: water.date, desiliters: water.desiliters });
+    });
+    return (
+      <ResponsiveContainer width="100%" aspect={2}>
+        <LineChart
+          data={data}
+          margin={{ top: 50, right: 50, left: 0, bottom: 50 }}
+        >
+          <Line type="monotone" dataKey="desiliters" />
+          <CartesianGrid stroke="#ccc" />
+          <XAxis dataKey="name" />
+          <YAxis dataKey="desiliters" />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }
+
   renderFetchControls() {
     return (
       <div>
@@ -67,7 +103,12 @@ class Trends extends Component {
     );
   }
   render() {
-    return <div>{this.renderFetchControls()}</div>;
+    return (
+      <div>
+        <div>{this.renderFetchControls()}</div>
+        <div align="center">{this.renderChart()}</div>
+      </div>
+    );
   }
 }
 
