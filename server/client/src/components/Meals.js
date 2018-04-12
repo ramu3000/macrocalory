@@ -1,17 +1,54 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
+import {
+  Panel,
+  Grid,
+  Row,
+  Col,
+  Button,
+  ButtonToolbar,
+  Popover,
+  OverlayTrigger
+} from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
 import { Link } from 'react-router-dom';
-import { fetchDailyMeals, fetchDailyWater, deleteMeal } from '../actions';
-import DatePicker from './DatePicker';
+import {
+  fetchDailyMeals,
+  fetchDailyWater,
+  deleteMeal,
+  chooseDate
+} from '../actions';
+import { Calendar } from 'react-date-range';
 
 class Meals extends Component {
   componentDidMount() {
     this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
+  }
+  async chooseDate(date) {
+    // When typing on date picker bar, it generates undefined values
+    if (!(date === undefined)) {
+      await this.props.chooseDate(date);
+      await this.props.fetchDailyMeals(this.props.date);
+      await this.props.fetchDailyWater(this.props.date);
+    }
+  }
+  async incrementDate() {
+    await this.chooseDate(
+      moment(this.props.date)
+        .add({ days: 1 })
+        .toDate()
+    );
+  }
+
+  async decrementDate() {
+    await this.chooseDate(
+      moment(this.props.date)
+        .add({ days: -1 })
+        .toDate()
+    );
   }
   editMeal(meal) {
     this.props.history.push(`meals/edit/${meal._id}`);
@@ -22,15 +59,48 @@ class Meals extends Component {
     await this.props.fetchDailyMeals(this.props.date);
   }
 
+  datepickerOverlay(onChange) {
+    return (
+      <Popover id="calendar" title="Choose a date">
+        <Calendar onChange={onChange} />
+      </Popover>
+    );
+  }
+
   renderDate() {
     const dateString = moment(this.props.date).format('ddd, DD of MMM YYYY');
+
     return (
       <div>
-        <DatePicker />
         <h3>{dateString}</h3>
+        <ButtonToolbar>
+          <Button
+            bsSize="small"
+            onClick={this.decrementDate.bind(this)}
+            className="btn-meals-date"
+          >
+            -
+          </Button>
+          <Button
+            bsSize="small"
+            onClick={this.incrementDate.bind(this)}
+            className="btn-meals-date"
+          >
+            +
+          </Button>
+
+          <OverlayTrigger
+            trigger={['click']}
+            placement="bottom"
+            overlay={this.datepickerOverlay(this.chooseDate.bind(this))}
+          >
+            <Button bsSize="small">Choose date</Button>
+          </OverlayTrigger>
+        </ButtonToolbar>
       </div>
     );
   }
+
   renderIngredientRow(ingredient) {
     return (
       <Row key={ingredient._id}>
@@ -40,6 +110,7 @@ class Meals extends Component {
       </Row>
     );
   }
+
   renderMealPanel(meal) {
     const timeStr = moment(meal.date).format('HH:mm');
     return (
@@ -127,6 +198,7 @@ function mapsStateToProps({ meals, date }) {
 }
 
 export default connect(mapsStateToProps, {
+  chooseDate,
   fetchDailyMeals,
   fetchDailyWater,
   deleteMeal
