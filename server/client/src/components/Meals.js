@@ -154,7 +154,7 @@ class Meals extends Component {
 
   renderMeals() {
     return (
-      <div>
+      <div className="container">
         <h4>Meals: {this.props.meals.length} meals today</h4>
         <Grid fluid>
           {_.map(_.sortBy(this.props.meals, ['date']), meal => {

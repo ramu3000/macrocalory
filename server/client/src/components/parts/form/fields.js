@@ -36,8 +36,9 @@ export const renderDateField = function (field) {
     <div className={className}>
       <label>{field.label}</label>
       <DateTimePicker
+        {...field.input}
         onChange={field.input.onChange}
-        format="YYYY-MM-DD HH:MM"
+        
         time={field.showTime}
         value={!field.input.value ? null : new Date(field.input.value)}
       />

@@ -1,25 +1,35 @@
 .navbar-default {
   background-color: #41a76a;
   background: linear-gradient(
-    to right,
+    to bottom,
     rgb(74, 148, 102),
-    rgb(207, 255, 225)
+    rgb(74, 155, 125)
   );
   border-color: #a4b1a0;
   border-width: 2px;
+  margin: 0 -15px;
+  border:none;
+  box-shadow: -1px 1px 9px 0px;
+  margin-bottom:15px;
 }
 .navbar-default .navbar-brand {
   color: #0d5465;
+  color:white;
+}
+ul.navbar-nav {
+  display:inline; 
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
   color: #5389b4;
+  color:white;
 }
 .navbar-default .navbar-text {
   color: #0d5465;
+  color:white;
 }
 .navbar-default .navbar-nav > li > a {
-  color: #0d5465;
+  color: #0d5465;color:white;
 }
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {

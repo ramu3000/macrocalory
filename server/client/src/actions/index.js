@@ -10,8 +10,12 @@ import {
   CREATE_MEAL,
   DELETE_MEAL,
   FETCH_MEAL,
+<<<<<<< 528af8fdcd3d8ee4095cbec624bbf914a8a334b2
   CLEAR_TRENDS_DATA,
   FETCH_TRENDS_WATER_DATA
+=======
+  UPDATE_MEAL
+>>>>>>> working edit meal, styling header(maybe revert), small refactoring to new meal
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -105,4 +109,10 @@ export const fetchTrendsWater = () => async dispatch => {
 
 export const clearTrendsData = () => dispatch => {
   dispatch({ type: CLEAR_TRENDS_DATA, payload: {} });
+};
+
+export const updateMeal = (mealId, values, callback) => async dispatch => {
+  const res = await axios.post(`/api/meals/${mealId}`, values);
+  callback();
+  dispatch({ type: UPDATE_MEAL, payload: res.data });
 };

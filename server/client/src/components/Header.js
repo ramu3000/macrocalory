@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import 'react-day-picker/lib/style.css';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import '../css/navbar.css';
@@ -35,18 +35,21 @@ class Header extends Component {
 
   renderFeaturesNav() {
     return (
-      <Nav>
+      <div>
         {this.isLoggedIn() ? (
-          <NavItem componentClass={Link} href="/meals" to="/meals">
-            My Meals
-          </NavItem>
+          <Nav>
+            <NavItem componentClass={Link} href="/meals" to="/meals">
+              My Meals
+            </NavItem>
+            <NavItem componentClass={Link} href="/trends" to="/trends">
+              My Trends
+            </NavItem>
+            <NavItem componentClass={Link} href="/meals/new" to="/meals/new">
+              New Meal
+            </NavItem>
+          </Nav>
         ) : null}
-        {this.isLoggedIn() ? (
-          <NavItem componentClass={Link} href="/trends" to="/trends">
-            My Trends
-          </NavItem>
-        ) : null}
-      </Nav>
+      </div>
     );
   }
   render() {

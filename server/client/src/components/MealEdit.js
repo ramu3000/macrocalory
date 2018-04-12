@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
-import { fetchMeal } from '../actions';
+import { fetchMeal, updateMeal } from '../actions';
 import moment from 'moment';
 
 
@@ -20,6 +20,16 @@ class MealEdit extends Component {
     const dateStr = moment(value).isValid() ? moment(value).format('YYYY-MM-DD HH:MM'): value;
     return dateStr;
   }
+
+  onSubmit(values){
+    console.log(values);
+    //send to action
+    this.props.updateMeal(this.props.match.params.id, values, () => {
+      //this.props.history.push('/meals');
+    });
+
+
+  }
     
   render() {
     if(!this.props.initialValues) {
@@ -31,7 +41,7 @@ class MealEdit extends Component {
       <div>
         <Link className="btn btn-primary" to="/meals">go back</Link>
         <h2>Edit your Meal - {this.props.meals.name}</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={ handleSubmit(this.onSubmit.bind(this) )}>
           <div className="row">
             <Field 
               name="name"
@@ -45,7 +55,7 @@ class MealEdit extends Component {
               placeholder="YYYY-MM-DD"
               component={renderDateField}
               size="col-xs-3"
-              format={this.formatDate}
+              
               showTime={true}
             />
           </div>
@@ -74,6 +84,6 @@ let InitializeFromStateForm = reduxForm({
 })(MealEdit);
 
 //and add redux connection
-InitializeFromStateForm =  connect(mapsStateToProps,{fetchMeal})(InitializeFromStateForm);
+InitializeFromStateForm =  connect(mapsStateToProps,{fetchMeal,updateMeal})(InitializeFromStateForm);
 
 export default InitializeFromStateForm;
