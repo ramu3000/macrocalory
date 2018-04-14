@@ -10,12 +10,9 @@ import {
   CREATE_MEAL,
   DELETE_MEAL,
   FETCH_MEAL,
-<<<<<<< 528af8fdcd3d8ee4095cbec624bbf914a8a334b2
   CLEAR_TRENDS_DATA,
-  FETCH_TRENDS_WATER_DATA
-=======
+  FETCH_TRENDS_WATER_DATA,
   UPDATE_MEAL
->>>>>>> working edit meal, styling header(maybe revert), small refactoring to new meal
 } from './types';
 
 export const fetchUser = () => async dispatch => {
