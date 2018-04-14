@@ -10,12 +10,6 @@ import { renderField, renderDateField, renderIngredients } from './parts/form/fi
 
 class MealNew extends Component {
 
-  formatTime(time,date){
-    let newTime = moment(date, 'ddd MMM D YYYY HH:mm:ss ZZ');
-    let formTime = (time).split(':');
-    newTime.set({h: formTime[0], m: formTime[1], s: 0});
-    return newTime.toDate();
-  }
   addFatsecretValues() {
     //dummy values for now
     //Placeholder for values that fatsecret gives

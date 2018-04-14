@@ -7,25 +7,18 @@ import moment from 'moment';
 
 
 import { renderField, renderDateField, renderIngredients } from './parts/form/fields';
+import validate from './parts/form/validate';
 
 class MealEdit extends Component {
   componentDidMount() {
     this.props.fetchMeal(this.props.match.params.id);
   }
 
-  formatDate(value,name){
-    if(!value){
-      return value;
-    }
-    const dateStr = moment(value).isValid() ? moment(value).format('YYYY-MM-DD HH:MM'): value;
-    return dateStr;
-  }
-
   onSubmit(values){
     console.log(values);
     //send to action
     this.props.updateMeal(this.props.match.params.id, values, () => {
-      //this.props.history.push('/meals');
+      this.props.history.push('/meals');
     });
 
 
@@ -36,7 +29,6 @@ class MealEdit extends Component {
       return <div></div>;
     } 
     const { handleSubmit, pristine, reset, submitting } = this.props;
-    console.log(this.props)
     return (
       <div>
         <Link className="btn btn-primary" to="/meals">go back</Link>
@@ -73,6 +65,7 @@ class MealEdit extends Component {
   }
 }
 
+
 function mapsStateToProps({ meals, date, ownProps }) {
   return { initialValues: meals, meals, date, ownProps };
 }
@@ -80,6 +73,7 @@ function mapsStateToProps({ meals, date, ownProps }) {
 let InitializeFromStateForm = reduxForm({
   // a unique name for the form
   form: 'editMeal',
+  validate,
   enableReinitialize : true
 })(MealEdit);
 
