@@ -41,23 +41,22 @@ class MealNew extends Component {
   render(){
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
-      <div>
-        <Link className="btn btn-primary" to="/meals">go back</Link>
-        <h2>Add a new meal</h2>
+      <div className="container">
+        <h2>Add meal</h2>
         <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
           <div className="row">
             <Field 
               name="name"
               label="Meal name"
               component={renderField}
-              size="col-xs-6"
+              size="col-sm-4"
             />
             <Field 
               name="date"
               label="Date & Time"
               placeholder="YYYY-MM-DD"
               component={renderDateField}
-              size="col-xs-3"
+              size="col-sm-4 col-md-3"
               
               showTime={true}
             />

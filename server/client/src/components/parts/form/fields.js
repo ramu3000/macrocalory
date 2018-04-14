@@ -3,7 +3,8 @@ import { Field } from 'redux-form';
 import moment from 'moment';
 import { DateTimePicker } from 'react-widgets';
 import momentLocaliser from 'react-widgets-moment';
-import 'react-widgets/dist/css/react-widgets.css'
+import { Tooltip } from 'react-bootstrap';
+import 'react-widgets/dist/css/react-widgets.css';
 momentLocaliser(moment)
 
 //field parameter handles all events properties for Field component
@@ -51,16 +52,7 @@ export const renderDateField = function (field) {
 export const renderIngredients = function({ fields, meta: {error, submitFailed}}){ 
   return(
     <div>
-      <div className="row">
-        <div className="col-sm-3">
-          <h3 className="form__subtitle">Ingredients</h3>
-        </div>
-        <div className="col-sm-3">
-          <button className="btn btn-primary" type="button" onClick={() => fields.push({})}>
-            Add ingredient
-          </button>
-        </div>
-      </div>
+     
       <ul>
         <li>
           {submitFailed && error && <span>{error}</span>}
@@ -68,9 +60,9 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
         {fields.map(function(ingredient, index) { 
           return (
             <li key={index}>
-              <h4>Ingredient #{index + 1}</h4>
-              <div className="row">
-                <div className="col-sm-2">
+             
+              <div className="row ingredient">
+                <div className="col-sm-1">
                   <button
                     className="btn btn-danger remove-ingredient"
                     type="button"
@@ -80,23 +72,25 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
                   X
                   </button>
                 </div>
-                <div className="col-sm-10">
-                  <Field
-                    name={`${ingredient}.name`}
-                    type="text"
-                    placeholder="type an ingredient"
-                    component={renderField}
-                    label="Ingredient"
-                    size="col-xs-8" //bootstrap size 
-                  />
-                  <Field
-                    name={`${ingredient}.mass`}
-                    type="text"
-                    placeholder="100"
-                    component={renderField}
-                    label="Määrä grammoissa tai millilitroissa "
-                    size="col-xs-4" //bootstrap size 
-                  />
+                <div className="col-sm-11">
+                  <div className="row">
+                    <Field
+                      name={`${ingredient}.name`}
+                      type="text"
+                      placeholder="type an ingredient"
+                      component={renderField}
+                      label={`Ingredient #${index + 1}`}
+                      size="col-md-4" //bootstrap size 
+                    />
+                    <Field
+                      name={`${ingredient}.mass`}
+                      type="text"
+                      placeholder="100"
+                      component={renderField}
+                      label="Quantity (g/ml)"
+                      size="col-xs-8 col-sm-5 col-md-2" //bootstrap size 
+                    />
+                  </div>
                 </div>
               </div>
             </li>
@@ -104,6 +98,13 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
         }
         )}
       </ul>
+      <div className="row ingredient-actions">
+        <div className="col-sm-6">
+          <button className="btn btn-primary" type="button" onClick={() => fields.push({})}>
+            Add ingredient
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

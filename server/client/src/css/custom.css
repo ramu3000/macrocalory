@@ -1,3 +1,7 @@
+* {
+  margin:0;
+  padding:0;
+}
 body {
   background: linear-gradient(
     to right,
@@ -25,6 +29,8 @@ form button:first-of-type {
 
 form ul {
   list-style: none;
+  padding:0;
+  margin:0;
 }
 
 .DayPickerInput input {
@@ -44,4 +50,9 @@ form ul {
   -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+/* ingredients */
+.ingredient-actions {
+  margin:25px -15px;
 }
