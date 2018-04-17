@@ -4,6 +4,7 @@ import { Field, FieldArray, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { fetchMeal, updateMeal } from '../actions';
 import moment from 'moment';
+import _ from 'lodash';
 
 
 import { renderField, renderDateField, renderIngredients } from './parts/form/fields';
@@ -13,9 +14,26 @@ class MealEdit extends Component {
   componentDidMount() {
     this.props.fetchMeal(this.props.match.params.id);
   }
+  addFatsecretValues() {
+    //dummy values for now
+    //Placeholder for values that fatsecret gives
+    return {
+      kcal: 200, //     
+      protein: .5, //grams
+      carbohydrate:  40, //grams
+      fat: 20.12
+    };
+  }
 
   onSubmit(values){
     console.log(values);
+
+    let newValues =_.map(values.ingredients, ingredient => {
+      const obj = {};
+      _.merge(obj,ingredient,this.addFatsecretValues());
+      return obj;
+    });
+    values.ingredients = newValues;
     //send to action
     this.props.updateMeal(this.props.match.params.id, values, () => {
       this.props.history.push('/meals');
