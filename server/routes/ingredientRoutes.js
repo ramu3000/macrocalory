@@ -1,4 +1,5 @@
 const requireLogin = require('../middlewares/requireLogin');
+const axios = require('axios');
 
 module.exports = app => {
   app.get('/api/ingredients', requireLogin, async (req, res) => {
@@ -57,9 +58,20 @@ module.exports = app => {
 
     axios.get(`https://fineli.fi/fineli/api/v1/foods?q=${query}`)
       .then(response => {
+
+        const filteredData = response.data.map(ingredient => {
+          return {
+            fineliId: ingredient.id,
+            name: ingredient.name.en,
+            protein: ingredient.protein,
+            carbohydrate: ingredient.carbohydrate,
+            energy: ingredient.energyKcal,
+            fat: ingredient.fat
+          };
+        });
+
         res.json({
-          id: '1',
-          fineli: response.data
+          data: filteredData,
         });
       })
       .catch( err => {
