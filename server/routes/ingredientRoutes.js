@@ -44,4 +44,30 @@ module.exports = app => {
       res.status(500).json({ error: err });
     }
   });
+  app.get('/api/fineli/foods', async (req, res) => {
+
+    const query = req.query.q;
+    
+    if(!query) {
+      res.status(500).json({
+        data: 'no food query was given'
+      });
+      return 0;
+    }
+
+    axios.get(`https://fineli.fi/fineli/api/v1/foods?q=${query}`)
+      .then(response => {
+        res.json({
+          id: '1',
+          fineli: response.data
+        });
+      })
+      .catch( err => {
+        console.log(err);
+      });
+
+  
+    
+
+  });
 };
