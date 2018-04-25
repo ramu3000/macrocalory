@@ -3,64 +3,68 @@ import { Field } from 'redux-form';
 import moment from 'moment';
 import { DateTimePicker } from 'react-widgets';
 import momentLocaliser from 'react-widgets-moment';
-import { Tooltip } from 'react-bootstrap';
 import 'react-widgets/dist/css/react-widgets.css';
-momentLocaliser(moment)
+momentLocaliser(moment);
 
 //field parameter handles all events properties for Field component
-export const renderField = function (field) {
-  const { meta: { touched, error } } = field;
-  const colSize =  field.size ? field.size: '';
-  const className = `form-group ${colSize} ${ touched && error ? ' has-error' : ''} `;
-  
+export const renderField = function(field) {
+  const {
+    meta: { touched, error }
+  } = field;
+  const colSize = field.size ? field.size : '';
+  const className = `form-group ${colSize} ${
+    touched && error ? ' has-error' : ''
+  } `;
+
   return (
     <div className={className}>
       <label>{field.label}</label>
       <input
-        placeholder={field.placeholder ? field.placeholder: ''}
+        placeholder={field.placeholder ? field.placeholder : ''}
         className="form-control"
         type="text"
         {...field.input} //generate all input events, like equliant to examples of: onChange={field.input.onChange} or onFocus={field.input.onFocus} or onBlur....
       />
-      <div className="help-block">{touched ? error: ''}</div>
+      <div className="help-block">{touched ? error : ''}</div>
     </div>
   );
 };
 
+export const renderDateField = function(field) {
+  const {
+    meta: { touched, error }
+  } = field;
+  const colSize = field.size ? field.size : '';
+  const className = `form-group ${colSize} ${
+    touched && error ? ' has-error' : ''
+  } `;
 
-export const renderDateField = function (field) {
-  const { meta: { touched, error } } = field;
-  const colSize =  field.size ? field.size: '';
-  const className = `form-group ${colSize} ${ touched && error ? ' has-error' : ''} `;
-  
   return (
     <div className={className}>
       <label>{field.label}</label>
       <DateTimePicker
         {...field.input}
         onChange={field.input.onChange}
-        
         time={field.showTime}
         value={!field.input.value ? null : new Date(field.input.value)}
       />
-    
-      <div className="help-block">{touched ? error: ''}</div>
+
+      <div className="help-block">{touched ? error : ''}</div>
     </div>
   );
 };
 
-export const renderIngredients = function({ fields, meta: {error, submitFailed}}){ 
-  return(
+export const renderIngredients = function({
+  fields,
+  meta: { error, submitFailed }
+}) {
+  return (
     <div>
-     
       <ul>
-        <li>
-          {submitFailed && error && <span>{error}</span>}
-        </li>
-        {fields.map(function(ingredient, index) { 
+        <li>{submitFailed && error && <span>{error}</span>}</li>
+        {fields.map(function(ingredient, index) {
           return (
             <li key={index}>
-             
               <div className="row ingredient">
                 <div className="col-sm-1">
                   <button
@@ -69,7 +73,7 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
                     title="Remove ingredient"
                     onClick={() => fields.remove(index)}
                   >
-                  X
+                    X
                   </button>
                 </div>
                 <div className="col-sm-11">
@@ -80,7 +84,7 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
                       placeholder="type an ingredient"
                       component={renderField}
                       label={`Ingredient #${index + 1}`}
-                      size="col-md-4" //bootstrap size 
+                      size="col-md-4" //bootstrap size
                     />
                     <Field
                       name={`${ingredient}.mass`}
@@ -88,24 +92,26 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
                       placeholder="100"
                       component={renderField}
                       label="Quantity (g/ml)"
-                      size="col-xs-8 col-sm-5 col-md-2" //bootstrap size 
+                      size="col-xs-8 col-sm-5 col-md-2" //bootstrap size
                     />
                   </div>
                 </div>
               </div>
             </li>
           );
-        }
-        )}
+        })}
       </ul>
       <div className="row ingredient-actions">
         <div className="col-sm-6">
-          <button className="btn btn-primary" type="button" onClick={() => fields.push({})}>
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={() => fields.push({})}
+          >
             Add ingredient
           </button>
         </div>
       </div>
     </div>
   );
-}
-
+};

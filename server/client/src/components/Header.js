@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import 'react-day-picker/lib/style.css';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import '../css/navbar.css';

@@ -1,10 +1,10 @@
-export default function validate(values){
-  const errors = {}; 
+export default function validate(values) {
+  const errors = {};
   //validate the inputs
-  if(!values.name){
+  if (!values.name) {
     errors.name = 'Enter a Meal name';
   }
- 
+
   if (!values.ingredients || !values.ingredients.length) {
     errors.ingredients = { _error: 'At least one ingredient must be entered' };
   } else {
