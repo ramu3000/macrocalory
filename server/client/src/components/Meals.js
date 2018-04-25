@@ -21,6 +21,7 @@ import {
   chooseDate
 } from '../actions';
 import { Calendar } from 'react-date-range';
+import '../css/meals.css';
 
 class Meals extends Component {
   componentDidMount() {
