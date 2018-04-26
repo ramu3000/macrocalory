@@ -27,6 +27,16 @@ export const chooseDate = date => dispatch => {
   dispatch({ type: CHOOSE_DATE, payload: date });
 };
 
+const fetchMealsWithStrictInterval = async (after, before) => {
+  const url = '/api/meals/?after=' + after + '&before=' + before;
+  try {
+    const res = await axios.get(url);
+    return res.data.meals;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const fetchDailyMeals = date => async dispatch => {
   const startOfDay = moment(date)
     .startOf('day')
@@ -34,14 +44,8 @@ export const fetchDailyMeals = date => async dispatch => {
   const endOfDay = moment(date)
     .endOf('day')
     .toDate();
-  const url =
-    '/api/meals/?after=' +
-    startOfDay.toISOString() +
-    '&before=' +
-    endOfDay.toISOString();
-  const res = await axios.get(url);
-
-  dispatch({ type: FETCH_DAILY_MEALS, payload: res.data.meals });
+  const meals = await fetchMealsWithStrictInterval(startOfDay, endOfDay);
+  dispatch({ type: FETCH_DAILY_MEALS, payload: meals });
 };
 
 export const fetchMeal = mealId => async dispatch => {
