@@ -12,6 +12,7 @@ import {
   FETCH_MEAL,
   CLEAR_TRENDS_DATA,
   FETCH_TRENDS_WATER_DATA,
+  FETCH_TRENDS_MEALS_DATA,
   UPDATE_MEAL
 } from './types';
 
@@ -46,6 +47,11 @@ export const fetchDailyMeals = date => async dispatch => {
     .toDate();
   const meals = await fetchMealsWithStrictInterval(startOfDay, endOfDay);
   dispatch({ type: FETCH_DAILY_MEALS, payload: meals });
+};
+
+export const fetchTrendsMeals = (after, before) => async dispatch => {
+  const meals = await fetchMealsWithStrictInterval(after, before);
+  dispatch({ type: FETCH_TRENDS_MEALS_DATA, payload: meals });
 };
 
 export const fetchMeal = mealId => async dispatch => {
@@ -104,12 +110,12 @@ export const fetchTrendsWater = () => async dispatch => {
     const res = await axios.get(url);
     dispatch({ type: FETCH_TRENDS_WATER_DATA, payload: res.data.dailyWaters });
   } catch (err) {
-    dispatch({ type: FETCH_TRENDS_WATER_DATA, payload: [] });
+    dispatch({ type: FETCH_TRENDS_WATER_DATA, payload: null });
   }
 };
 
 export const clearTrendsData = () => dispatch => {
-  dispatch({ type: CLEAR_TRENDS_DATA, payload: {} });
+  dispatch({ type: CLEAR_TRENDS_DATA, payload: null });
 };
 
 export const updateMeal = (mealId, values, callback) => async dispatch => {
