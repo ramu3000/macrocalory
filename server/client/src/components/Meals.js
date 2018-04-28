@@ -72,7 +72,7 @@ class Meals extends Component {
     const dateString = moment(this.props.date).format('ddd, DD of MMM YYYY');
 
     return (
-      <div>
+      <Grid>
         <h3>{dateString}</h3>
         <ButtonToolbar>
           <Button
@@ -98,7 +98,7 @@ class Meals extends Component {
             <Button bsSize="small">Choose date</Button>
           </OverlayTrigger>
         </ButtonToolbar>
-      </div>
+      </Grid>
     );
   }
 
@@ -155,9 +155,9 @@ class Meals extends Component {
 
   renderMeals() {
     return (
-      <div className="container">
+      <Grid>
         <h4>Meals: {this.props.meals.length} meals today</h4>
-        <Grid fluid>
+        <Grid>
           {_.map(_.sortBy(this.props.meals, ['date']), meal => {
             return this.renderMealPanel(meal);
           })}
@@ -171,25 +171,25 @@ class Meals extends Component {
             </Panel>
           </Link>
         </Grid>
-      </div>
+      </Grid>
     );
   }
 
   renderWater() {
     return (
-      <div>
+      <Grid>
         <DailyWater />
-      </div>
+      </Grid>
     );
   }
 
   render() {
     return (
-      <div>
+      <Grid>
         {this.renderDate()}
         {this.renderMeals()}
         {this.renderWater()}
-      </div>
+      </Grid>
     );
   }
 }

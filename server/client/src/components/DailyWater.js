@@ -27,51 +27,51 @@ class DailyWater extends Component {
 
   render() {
     return (
-      <Grid fluid>
-        <Row>
-          <h4>Water: {(this.props.water / 10).toFixed(1)} liters today</h4>
-        </Row>
-        <Row>
-          <Col xs={2} sm={1}>
-            <Button
-              disabled={this.props.water <= 0}
-              bsStyle="info"
-              className="btn-water"
-              onClick={this.subLiter.bind(this)}
-            >
-              --
-            </Button>
-          </Col>
-          <Col xs={2} sm={1}>
-            <Button
-              disabled={this.props.water <= 0}
-              bsStyle="info"
-              className="btn-water"
-              onClick={this.subDesiLiter.bind(this)}
-            >
-              -
-            </Button>
-          </Col>
-          <Col xs={2} sm={1}>
-            <Button
-              bsStyle="info"
-              className="btn-water"
-              onClick={this.addDesiLiter.bind(this)}
-            >
-              +
-            </Button>
-          </Col>
-          <Col xs={2} sm={1}>
-            <Button
-              bsStyle="info"
-              className="btn-water"
-              onClick={this.addLiter.bind(this)}
-            >
-              ++
-            </Button>
-          </Col>
-        </Row>
-      </Grid>
+      <div>
+        <h4>Water: {(this.props.water / 10).toFixed(1)} liters today</h4>
+        <Grid>
+          <Row>
+            <Col xs={2} sm={1}>
+              <Button
+                disabled={this.props.water <= 0}
+                bsStyle="info"
+                className="btn-water"
+                onClick={this.subLiter.bind(this)}
+              >
+                --
+              </Button>
+            </Col>
+            <Col xs={2} sm={1}>
+              <Button
+                disabled={this.props.water <= 0}
+                bsStyle="info"
+                className="btn-water"
+                onClick={this.subDesiLiter.bind(this)}
+              >
+                -
+              </Button>
+            </Col>
+            <Col xs={2} sm={1}>
+              <Button
+                bsStyle="info"
+                className="btn-water"
+                onClick={this.addDesiLiter.bind(this)}
+              >
+                +
+              </Button>
+            </Col>
+            <Col xs={2} sm={1}>
+              <Button
+                bsStyle="info"
+                className="btn-water"
+                onClick={this.addLiter.bind(this)}
+              >
+                ++
+              </Button>
+            </Col>
+          </Row>
+        </Grid>
+      </div>
     );
   }
 }
