@@ -5,6 +5,7 @@ import dateReducer from './dateReducer';
 import mealsReducer from './mealsReducer';
 import waterReducer from './waterReducer';
 import trendsReducer from './trendsReducer';
+import ingredientsReducer from './ingredientsReducer';
 
 export default combineReducers({
   auth: authReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   meals: mealsReducer,
   water: waterReducer,
   form: formReducer,
-  trends: trendsReducer
+  trends: trendsReducer,
+  ingredients: ingredientsReducer,
 });

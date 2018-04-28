@@ -3,10 +3,10 @@ import { Field, FieldArray, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { createMeal } from '../actions';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
 
 import { renderField, renderDateField, renderIngredients } from './parts/form/fields';
+
+import renderSearchField from './parts/form/search';
 import validate from './parts/form/validate';
 
 class MealNew extends Component {
@@ -21,6 +21,7 @@ class MealNew extends Component {
       fat: 20.12
     };
   }
+
 
   onSubmit(values){
 
@@ -61,6 +62,11 @@ class MealNew extends Component {
               showTime={true}
             />
           </div>
+          <Field 
+            name="test"
+            label="test dropdown"
+            component={ renderSearchField }
+          />
           <FieldArray name="ingredients" component={renderIngredients} />
           <div className="form__actions">
             <button type="submit" className="btn btn-success">Save your meal</button>
@@ -76,8 +82,8 @@ class MealNew extends Component {
 }
 
 //getting props to this component
-function mapsStateToProps({ date }) {
-  return {  date };
+function mapsStateToProps({ date, ingredients }) {
+  return {  date, ingredients };
 }
 
 export default reduxForm({
@@ -86,5 +92,5 @@ export default reduxForm({
   form: 'mealForm'
 })(
   //and add redux connection
-  connect(mapsStateToProps, {createMeal})(MealNew)
+  connect(mapsStateToProps, {createMeal })(MealNew)
 );

@@ -107,5 +107,4 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
       </div>
     </div>
   );
-}
-
+};
