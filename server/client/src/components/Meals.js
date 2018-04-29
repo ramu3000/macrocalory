@@ -21,6 +21,7 @@ import {
   chooseDate
 } from '../actions';
 import { Calendar } from 'react-date-range';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import '../css/meals.css';
 
 class Meals extends Component {
@@ -69,7 +70,8 @@ class Meals extends Component {
   }
 
   renderDateAndControls() {
-    const dateString = 'My Meals: ' + moment(this.props.date).format('ddd, DD of MMM YYYY');
+    const dateString =
+      'My Meals: ' + moment(this.props.date).format('ddd, DD of MMM YYYY');
 
     return (
       <Grid>
@@ -105,23 +107,80 @@ class Meals extends Component {
   renderIngredientRow(ingredient) {
     return (
       <Row key={ingredient._id}>
-        <Col xs={2} />
-        <Col xs={7}>{ingredient.name}</Col>
-        <Col xs={3}>{ingredient.mass}g</Col>
+        <Col className="col-ingredient" xs={9} sm={4}>
+          {ingredient.name}
+        </Col>
+        <Col className="col-mass" xs={3} sm={3}>
+          {ingredient.mass}g
+        </Col>
+        <Col className="col-ch" xs={3} sm={1}>
+          {ingredient.carbohydrate * ingredient.mass / 100}g
+        </Col>
+        <Col className="col-fat" xs={3} sm={1}>
+          {ingredient.fat * ingredient.mass / 100}g
+        </Col>
+        <Col className="col-protein" xs={3} sm={1}>
+          {ingredient.protein * ingredient.mass / 100}g
+        </Col>
+        <Col className="col-kcal" xs={3} sm={2}>
+          {ingredient.kcal * ingredient.mass / 100}kcal
+        </Col>
       </Row>
+    );
+  }
+
+  renderMacroPieChart(meal) {
+    var carbohydrate = 0;
+    var fat = 0;
+    var protein = 0;
+    _.map(meal.ingredients, ingredient => {
+      carbohydrate += ingredient.carbohydrate * ingredient.mass / 100;
+      fat += ingredient.fat * ingredient.mass / 100;
+      protein += ingredient.protein * ingredient.mass / 100;
+    });
+    const data = [
+      { name: 'Carbohydrate', value: carbohydrate },
+      { name: 'Fat', value: fat },
+      { name: 'Protein', value: protein }
+    ];
+    const colors = ['#0066ff', '#ff0000', '#669900'];
+
+    return (
+      <PieChart width={320} height={200}>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={60}
+          fill="#8884d8"
+        >
+          {data.map((entry, index) => (
+            <Cell key={index} fill={colors[index % colors.length]} />
+          ))}
+        </Pie>
+        <Legend />
+        <Tooltip />
+      </PieChart>
     );
   }
 
   renderMealPanel(meal) {
     const timeStr = moment(meal.date).format('HH:mm');
+    var energy = 0;
+    _.map(meal.ingredients, ingredient => {
+      energy += ingredient.kcal * ingredient.mass / 100;
+    });
     return (
       <Panel key={meal._id} bsStyle="success">
         <Panel.Heading>
           <Row key={meal._id}>
             <Col xs={2}>{timeStr}</Col>
             <Panel.Toggle>
-              <Col xs={6}>{meal.name}</Col>
+              <Col xs={4}>{meal.name}</Col>
             </Panel.Toggle>
+            <Col xs={2}>{energy} kcal</Col>
             <Col xs={4} align="right">
               <Button
                 className="btn-meal-list"
@@ -144,9 +203,14 @@ class Meals extends Component {
         </Panel.Heading>
         <Panel.Collapse>
           <Panel.Body>
-            {_.map(_.sortBy(meal.ingredients, ['name']), ingredient => {
-              return this.renderIngredientRow(ingredient);
-            })}
+            <Col xs={12} md={8}>
+              {_.map(_.sortBy(meal.ingredients, ['name']), ingredient => {
+                return this.renderIngredientRow(ingredient);
+              })}
+            </Col>
+            <Col xs={12} md={4}>
+              {this.renderMacroPieChart(meal)}
+            </Col>
           </Panel.Body>
         </Panel.Collapse>
       </Panel>
@@ -154,9 +218,17 @@ class Meals extends Component {
   }
 
   renderMeals() {
+    var totalCalories = 0;
+    _.map(this.props.meals, meal => {
+      _.map(meal.ingredients, ingredient => {
+        totalCalories += ingredient.kcal * ingredient.mass / 100;
+      });
+    });
     return (
       <Grid>
-        <h4>Meals: {this.props.meals.length} meals today</h4>
+        <h4>
+          {this.props.meals.length} meals today, {totalCalories} kcal
+        </h4>
         <Grid>
           {_.map(_.sortBy(this.props.meals, ['date']), meal => {
             return this.renderMealPanel(meal);

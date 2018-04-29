@@ -14,3 +14,19 @@
   width: 45px;
   height: 45px;
 }
+
+.col-fat {
+  color: #06f;
+}
+
+.col-ch {
+  color: #f00;
+}
+
+.col-protein {
+  color: #690;
+}
+
+.col-ingredient {
+  font-weight: bold;
+}
