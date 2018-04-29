@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import connect from 'react-redux/lib/connect/connect';
-import { Button, ToggleButton, ToggleButtonGroup, Grid } from 'react-bootstrap';
+import {
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Grid,
+  OverlayTrigger,
+  Popover
+} from 'react-bootstrap';
 import {
   clearTrendsData,
   fetchTrendsWater,
@@ -15,12 +22,10 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Tooltip,
+  Legend
 } from 'recharts';
-import {
-  OverlayTrigger,
-  Popover
-} from 'react-bootstrap';
 import { DateRange } from 'react-date-range';
 import '../css/trends.css';
 
@@ -83,9 +88,9 @@ class Trends extends Component {
     const start = this.state.startDate;
     const end = this.state.endDate;
     MIterator(start, end).each('days', day => {
-      const str = day.format('YYYY-MM-DD');
       data.push({
-        dateStr: str,
+        date: day.format('YYYY-MM-DD'),
+        datePresentation: day.format('DD.MM'),
         protein: 0,
         carbohydrate: 0,
         fat: 0,
@@ -101,7 +106,7 @@ class Trends extends Component {
       // We find the correct daily object from chart data array
       const mealDate = moment(meal.date).format('YYYY-MM-DD');
       const dailyValues = _.find(data, record => {
-        return record.dateStr === mealDate;
+        return record.date === mealDate;
       });
 
       if (dailyValues) {
@@ -127,7 +132,7 @@ class Trends extends Component {
     _.map(data, zeroWater => {
       // If fetched daily waters contain this date, set the chart data value
       const existingRecord = _.find(waters, record => {
-        return record.date === zeroWater.dateStr;
+        return record.date === zeroWater.date;
       });
       if (existingRecord) {
         zeroWater.water = existingRecord.desiliters;
@@ -151,10 +156,12 @@ class Trends extends Component {
             data={chartData}
             margin={{ top: 50, right: 50, left: 0, bottom: 50 }}
           >
-            <Line type="monotone" dataKey="energy" />
+            <Line name="Energy (kcal)" type="monotone" dataKey="energy" />
             <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="dateStr" />
+            <XAxis dataKey="datePresentation" />
             <YAxis dataKey="energy" />
+            <Tooltip/>
+            <Legend/>
           </LineChart>
         </ResponsiveContainer>
       );
@@ -175,12 +182,14 @@ class Trends extends Component {
             data={chartData}
             margin={{ top: 50, right: 50, left: 0, bottom: 50 }}
           >
-            <Line type="monotone" dataKey="protein" />
-            <Line type="monotone" dataKey="carbohydrate" />
-            <Line type="monotone" dataKey="fat" />
+            <Line name="Protein (g)" type="monotone" dataKey="protein" stroke="#669900"/>
+            <Line name="Carbohydrate (g)" type="monotone" dataKey="carbohydrate" stroke="#0066ff"/>
+            <Line name="Fat (g)"type="monotone" dataKey="fat" stroke="#ff0000"/>
             <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="dateStr" />
-            <YAxis />
+            <XAxis dataKey="datePresentation"/>
+            <YAxis/>
+            <Tooltip/>
+            <Legend/>
           </LineChart>
         </ResponsiveContainer>
       );
@@ -201,10 +210,12 @@ class Trends extends Component {
             data={chartData}
             margin={{ top: 50, right: 50, left: 0, bottom: 50 }}
           >
-            <Line type="monotone" dataKey="water" />
+            <Line name="Water (dl)" type="monotone" dataKey="water" />
             <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="dateStr" />
+            <XAxis dataKey="datePresentation" />
             <YAxis dataKey="water" />
+            <Tooltip/>
+            <Legend/>
           </LineChart>
         </ResponsiveContainer>
       );
