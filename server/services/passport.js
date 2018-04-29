@@ -33,6 +33,7 @@ passport.use(
       const newWaterId = new mongoose.mongo.ObjectID();
       const user = await new User({
         googleId: profile.id,
+        name: profile.name.givenName,
         _water: newWaterId
       }).save();
       await new Water({
