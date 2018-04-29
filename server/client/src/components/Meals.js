@@ -9,7 +9,8 @@ import {
   Button,
   ButtonToolbar,
   Popover,
-  OverlayTrigger
+  OverlayTrigger,
+  Glyphicon
 } from 'react-bootstrap';
 import _ from 'lodash';
 import DailyWater from './DailyWater';
@@ -82,14 +83,14 @@ class Meals extends Component {
             onClick={this.decrementDate.bind(this)}
             className="btn-meals-date"
           >
-            -
+            <Glyphicon glyph="chevron-left" />
           </Button>
           <Button
             bsSize="small"
             onClick={this.incrementDate.bind(this)}
             className="btn-meals-date"
           >
-            +
+            <Glyphicon glyph="chevron-right" />
           </Button>
 
           <OverlayTrigger
@@ -97,7 +98,9 @@ class Meals extends Component {
             placement="bottom"
             overlay={this.datepickerOverlay(this.chooseDate.bind(this))}
           >
-            <Button bsSize="small">Choose date</Button>
+            <Button bsSize="small">
+              <Glyphicon glyph="calendar" />
+            </Button>
           </OverlayTrigger>
         </ButtonToolbar>
       </Grid>

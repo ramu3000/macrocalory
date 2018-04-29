@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Grid, Row, Col } from 'react-bootstrap';
+import { Button, Grid, Row, Col, Glyphicon } from 'react-bootstrap';
 import { setWater } from '../actions';
 
 class DailyWater extends Component {
@@ -38,7 +38,7 @@ class DailyWater extends Component {
                 className="btn-water"
                 onClick={this.subLiter.bind(this)}
               >
-                --
+                <Glyphicon glyph="minus"/>
               </Button>
             </Col>
             <Col xs={2} sm={1}>
@@ -66,7 +66,7 @@ class DailyWater extends Component {
                 className="btn-water"
                 onClick={this.addLiter.bind(this)}
               >
-                ++
+                <Glyphicon glyph="plus"/>
               </Button>
             </Col>
           </Row>
