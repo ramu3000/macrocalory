@@ -68,8 +68,8 @@ class Meals extends Component {
     );
   }
 
-  renderDate() {
-    const dateString = moment(this.props.date).format('ddd, DD of MMM YYYY');
+  renderDateAndControls() {
+    const dateString = 'My Meals: ' + moment(this.props.date).format('ddd, DD of MMM YYYY');
 
     return (
       <Grid>
@@ -186,7 +186,7 @@ class Meals extends Component {
   render() {
     return (
       <Grid>
-        {this.renderDate()}
+        {this.renderDateAndControls()}
         {this.renderMeals()}
         {this.renderWater()}
       </Grid>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import connect from 'react-redux/lib/connect/connect';
-import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { Button, ToggleButton, ToggleButtonGroup, Grid } from 'react-bootstrap';
 import {
   clearTrendsData,
   fetchTrendsWater,
@@ -17,8 +17,12 @@ import {
   YAxis,
   ResponsiveContainer
 } from 'recharts';
-import { Panel } from 'react-bootstrap';
+import {
+  OverlayTrigger,
+  Popover
+} from 'react-bootstrap';
 import { DateRange } from 'react-date-range';
+import '../css/trends.css';
 
 const WATER = 'water';
 const MACRO = 'macronutrients';
@@ -33,6 +37,7 @@ class Trends extends Component {
     this.state = {
       startDate: new Date(),
       endDate: new Date(),
+      gotData: false,
       toggles: []
     };
   }
@@ -63,6 +68,8 @@ class Trends extends Component {
     // We can only get ALL water data for our user (without start and end dates)
     // AND this data does not contain zero-water-dates
     this.props.fetchTrendsWater();
+
+    this.setState({ gotData: true });
   }
 
   buildChartData(meals, waters) {
@@ -206,43 +213,81 @@ class Trends extends Component {
 
   handleSelect(range) {
     this.props.clearTrendsData();
+    this.setState({ gotData: false });
     this.setState({ startDate: range.startDate.toDate() });
     this.setState({ endDate: range.endDate.toDate() });
   }
 
-  renderControlPanel() {
+  datepickerOverlay(onChange) {
     return (
-      <Panel>
-        <Panel.Heading>
-          <ToggleButtonGroup
-            vertical
-            bsSize="xsmall"
-            type="checkbox"
-            value={this.state.toggles}
-            onChange={this.handleChange}
-          >
-            <ToggleButton value={MACRO}>Macronutrients</ToggleButton>
-            <ToggleButton value={ENERGY}>Energy</ToggleButton>
-            <ToggleButton value={WATER}>Water</ToggleButton>
-          </ToggleButtonGroup>
-          <Button
-            bsStyle="primary"
-            onClick={this.fetchTrendsData.bind(this)}
-            disabled={this.state.toggles.length === 0}
-          >
-            GO!
-          </Button>
-          <Panel.Toggle>Choose date range</Panel.Toggle>
-        </Panel.Heading>
-        <Panel.Collapse>
-          <Panel.Body>
-            <DateRange
-              onInit={this.handleSelect.bind(this)}
-              onChange={this.handleSelect.bind(this)}
-            />
-          </Panel.Body>
-        </Panel.Collapse>
-      </Panel>
+      <Popover id="calendar" title="Choose a date">
+        <DateRange onInit={onChange} onChange={onChange} />
+      </Popover>
+    );
+  }
+
+  validDateRange() {
+    return (
+      this.state.startDate &&
+      this.state.endDate &&
+      !moment(this.state.startDate).isSame(moment(this.state.endDate), 'day')
+    );
+  }
+
+  renderDateAndControls() {
+    var header = 'My Trends: ';
+    if (this.validDateRange()) {
+      header +=
+        moment(this.state.startDate).format('DD.MM.YYYY') +
+        ' - ' +
+        moment(this.state.endDate).format('DD.MM.YYYY');
+    } else {
+      header += 'Range not set';
+    }
+
+    var getDataButtonTxt = 'Load Data';
+    if (this.state.gotData) {
+      getDataButtonTxt = 'Data Loaded';
+    }
+    return (
+      <Grid>
+        <h3>{header}</h3>
+        <OverlayTrigger
+          trigger={['click']}
+          placement="bottom"
+          overlay={this.datepickerOverlay(this.handleSelect.bind(this))}
+        >
+          <Button className="btn-set-range">Set Range</Button>
+        </OverlayTrigger>
+        <Button
+          className="btn-load-data"
+          bsStyle="primary"
+          onClick={this.fetchTrendsData.bind(this)}
+          disabled={this.state.gotData || !this.validDateRange()}
+        >
+          {getDataButtonTxt}
+        </Button>
+      </Grid>
+    );
+  }
+
+  renderChartToggles() {
+    return (
+      <Grid>
+        <h4>Choose charts to show</h4>
+        <ToggleButtonGroup
+          justified
+          bsSize="xsmall"
+          type="checkbox"
+          value={this.state.toggles}
+          onChange={this.handleChange}
+          className="btn-chart-toggle"
+        >
+          <ToggleButton value={ENERGY}>Energy</ToggleButton>
+          <ToggleButton value={MACRO}>Macros</ToggleButton>
+          <ToggleButton value={WATER}>Water</ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
     );
   }
 
@@ -265,10 +310,11 @@ class Trends extends Component {
 
   render() {
     return (
-      <div>
-        {this.renderControlPanel()}
+      <Grid>
+        {this.renderDateAndControls()}
+        {this.renderChartToggles()}
         {this.renderCharts()}
-      </div>
+      </Grid>
     );
   }
 }
