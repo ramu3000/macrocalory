@@ -56,3 +56,7 @@ form ul {
 .ingredient-actions {
   margin:25px -15px;
 }
+
+.popover {
+  max-width: 300px;
+}
