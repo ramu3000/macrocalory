@@ -6,7 +6,8 @@ import {
   ToggleButtonGroup,
   Grid,
   OverlayTrigger,
-  Popover
+  Popover,
+  Glyphicon
 } from 'react-bootstrap';
 import {
   clearTrendsData,
@@ -160,8 +161,8 @@ class Trends extends Component {
             <CartesianGrid stroke="#ccc" />
             <XAxis dataKey="datePresentation" />
             <YAxis dataKey="energy" />
-            <Tooltip/>
-            <Legend/>
+            <Tooltip />
+            <Legend />
           </LineChart>
         </ResponsiveContainer>
       );
@@ -182,14 +183,29 @@ class Trends extends Component {
             data={chartData}
             margin={{ top: 50, right: 50, left: 0, bottom: 50 }}
           >
-            <Line name="Protein (g)" type="monotone" dataKey="protein" stroke="#669900"/>
-            <Line name="Carbohydrate (g)" type="monotone" dataKey="carbohydrate" stroke="#0066ff"/>
-            <Line name="Fat (g)"type="monotone" dataKey="fat" stroke="#ff0000"/>
+            <Line
+              name="Protein (g)"
+              type="monotone"
+              dataKey="protein"
+              stroke="#669900"
+            />
+            <Line
+              name="Carbohydrate (g)"
+              type="monotone"
+              dataKey="carbohydrate"
+              stroke="#0066ff"
+            />
+            <Line
+              name="Fat (g)"
+              type="monotone"
+              dataKey="fat"
+              stroke="#ff0000"
+            />
             <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="datePresentation"/>
-            <YAxis/>
-            <Tooltip/>
-            <Legend/>
+            <XAxis dataKey="datePresentation" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
           </LineChart>
         </ResponsiveContainer>
       );
@@ -214,8 +230,8 @@ class Trends extends Component {
             <CartesianGrid stroke="#ccc" />
             <XAxis dataKey="datePresentation" />
             <YAxis dataKey="water" />
-            <Tooltip/>
-            <Legend/>
+            <Tooltip />
+            <Legend />
           </LineChart>
         </ResponsiveContainer>
       );
@@ -231,7 +247,7 @@ class Trends extends Component {
 
   datepickerOverlay(onChange) {
     return (
-      <Popover id="calendar" title="Choose a date">
+      <Popover id="calendar" title="Choose date range">
         <DateRange onInit={onChange} onChange={onChange} />
       </Popover>
     );
@@ -245,6 +261,76 @@ class Trends extends Component {
     );
   }
 
+  renderDateRangeButton() {
+    return (
+      <OverlayTrigger
+        trigger={['click']}
+        placement="bottom"
+        overlay={this.datepickerOverlay(this.handleSelect.bind(this))}
+      >
+        <Button className="btn-set-range">
+          <Glyphicon glyph="calendar" />
+        </Button>
+      </OverlayTrigger>
+    );
+  }
+
+  loadButtonPopover(text) {
+    if (text === null) {
+      return;
+    } else {
+      return <Popover id="loadButton">{text}</Popover>;
+    }
+  }
+  renderLoadButton() {
+    // This is ugly, but popover was very hard to get working as intended,
+    // so we handle this active button -case separately (without OverlayTrigger)
+    // which finally fixes most of the problems.
+    if (!this.state.gotData && this.validDateRange()) {
+      return (
+        <Button
+          className="btn-load-data"
+          bsStyle="primary"
+          onClick={this.fetchTrendsData.bind(this)}
+        >
+          <Glyphicon glyph="download" />
+        </Button>
+      );
+    } else {
+      // And here, the Popover barely works... we need additional <span> to
+      // wrap the button. The clicking has to happen in quite center of the
+      // button for this to work.
+      var glyphStr = '';
+      var loadTooltipTxt = '';
+      if (this.state.gotData) {
+        glyphStr = 'ok';
+        loadTooltipTxt = 'Data is already loaded for given date range.';
+      } else {
+        glyphStr = 'download';
+        loadTooltipTxt = 'You must choose date range first.';
+      }
+      return (
+        <OverlayTrigger
+          trigger={['click']}
+          rootClose
+          placement="bottom"
+          overlay={<Popover id="loadButton">{loadTooltipTxt}</Popover>}
+        >
+          <span>
+            <Button
+              className="btn-load-data"
+              bsStyle="primary"
+              onClick={this.fetchTrendsData.bind(this)}
+              disabled
+            >
+              <Glyphicon glyph={glyphStr} />
+            </Button>
+          </span>
+        </OverlayTrigger>
+      );
+    }
+  }
+
   renderDateAndControls() {
     var header = 'My Trends: ';
     if (this.validDateRange()) {
@@ -256,28 +342,11 @@ class Trends extends Component {
       header += 'Range not set';
     }
 
-    var getDataButtonTxt = 'Load Data';
-    if (this.state.gotData) {
-      getDataButtonTxt = 'Data Loaded';
-    }
     return (
       <Grid>
         <h3>{header}</h3>
-        <OverlayTrigger
-          trigger={['click']}
-          placement="bottom"
-          overlay={this.datepickerOverlay(this.handleSelect.bind(this))}
-        >
-          <Button className="btn-set-range">Set Range</Button>
-        </OverlayTrigger>
-        <Button
-          className="btn-load-data"
-          bsStyle="primary"
-          onClick={this.fetchTrendsData.bind(this)}
-          disabled={this.state.gotData || !this.validDateRange()}
-        >
-          {getDataButtonTxt}
-        </Button>
+        {this.renderDateRangeButton()}
+        {this.renderLoadButton()}
       </Grid>
     );
   }
@@ -285,7 +354,7 @@ class Trends extends Component {
   renderChartToggles() {
     return (
       <Grid>
-        <h4>Choose charts to show</h4>
+        <h4>Charts to show</h4>
         <ToggleButtonGroup
           justified
           bsSize="xsmall"
