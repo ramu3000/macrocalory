@@ -58,13 +58,12 @@ class MealNew extends Component {
               placeholder="YYYY-MM-DD"
               component={renderDateField}
               size="col-sm-4 col-md-3"
-              
               showTime={true}
             />
           </div>
           <Field 
-            name="test"
-            label="test dropdown"
+            name="addIngredient"
+            label="add custom ingredient"
             component={ renderSearchField }
           />
           <FieldArray name="ingredients" component={renderIngredients} />

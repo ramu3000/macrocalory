@@ -5,27 +5,48 @@ import { Field, FieldArray, reduxForm } from 'redux-form';
 import { searchIngredients } from '../../../actions';
 
 class SearchField extends Component {
+
+  constructor(props){
+    super(props);
+    this.doesItWork = this.doesItWork.bind(this);
+  }
   searchIngredient(e) {
     if(e.target.value) {
       this.props.searchIngredients(e.target.value);
     }
   }
 
+  addIngredient(e) {
+  
+      ingredientSuggestion.map(function(ingredient, index) {
+
+        return (
+          <li onClick={ () => { this.props.doesItWork(ingredient);} } key={index}>{ingredient.name}</li>
+        );
+        
+      })
+    
+    return (
+      <div></div>
+    );
+  } 
+
   renderSearchField(field) {
     const { meta: { touched, error } } = field;
     const colSize =  field.size ? field.size: '';
     const className = `form-group ${colSize} ${ touched && error ? ' has-error' : ''} `;
-    let ingredientSuggestion = [];
+    let ingredientSuggestion = [];  
 
-    if(this.props.ingredients.foods && this.props.ingredients.foods.food) {
-      ingredientSuggestion = this.props.ingredients.foods.food;
+    if(this.props.ingredients && this.props.ingredients.data) {
+  
+      ingredientSuggestion = this.props.ingredients.data;
     }
     
     return (
       <div className={className}>
         <label>{field.label}</label>
         <input
-          name="test"
+          name={field.name}
           placeholder={field.placeholder ? field.placeholder: ''}
           className="form-control"
           type="text"
@@ -34,22 +55,11 @@ class SearchField extends Component {
             this.searchIngredient(e);
           }}
         />
-        { 
-          ingredientSuggestion.map(function(ingredient, index) {
-            return (
-              <li onClick={ this.addIngredient.bind(this) } key={index}>{ingredient.food_name}</li>
-            );
-            
-          })
-        }
+        
         <div className="help-block">{touched ? error: ''}</div>
       </div>
     );
   }
-  addIngredient(e) {
-    console.log(e);
-  } 
-
   render() {
     return (
       <div>
@@ -57,6 +67,9 @@ class SearchField extends Component {
           name="test"
           label="test dropdown"
           component={ this.renderSearchField.bind(this) }
+        />
+        <FieldList
+
         />
       </div>
     );

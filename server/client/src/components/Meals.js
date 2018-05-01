@@ -115,7 +115,7 @@ class Meals extends Component {
     const timeStr = moment(meal.date).format('HH:mm');
     return (
       <Panel key={meal._id} bsStyle="success">
-        <Panel.Heading>
+        <Panel.Heading key={meal._id}>
           <Row key={meal._id}>
             <Col xs={2}>{timeStr}</Col>
             <Panel.Toggle>
