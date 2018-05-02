@@ -49,11 +49,7 @@ class MealNew extends Component {
   }
 
   chosenFood(e) {
-    this.setState(prevState => ({
-      addedIng: [...prevState.addedIng, e]
-    }));
-    console.log(e);
-    console.log(this.state);
+    this.props.array.push('ingredients', e);
   }
   
   render(){
