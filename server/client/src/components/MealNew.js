@@ -11,6 +11,12 @@ import validate from './parts/form/validate';
 
 class MealNew extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {addedIng: []};
+    console.log('constructor',this.state)
+  }
+
   addFatsecretValues() {
     //dummy values for now
     //Placeholder for values that fatsecret gives
@@ -37,6 +43,17 @@ class MealNew extends Component {
     });
 
 
+  }
+  searchFieldClick(values){
+
+  }
+
+  chosenFood(e) {
+    this.setState(prevState => ({
+      addedIng: [...prevState.addedIng, e]
+    }));
+    console.log(e);
+    console.log(this.state);
   }
   
   render(){
@@ -65,6 +82,7 @@ class MealNew extends Component {
             name="addIngredient"
             label="add custom ingredient"
             component={ renderSearchField }
+            chosen={this.chosenFood}
           />
           <FieldArray name="ingredients" component={renderIngredients} />
           <div className="form__actions">

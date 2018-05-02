@@ -1,46 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray, reduxForm, arrayPush } from 'redux-form';
 
 import { searchIngredients } from '../../../actions';
 
 class SearchField extends Component {
 
-  constructor(props){
+  constructor (props) {
     super(props);
-    this.doesItWork = this.doesItWork.bind(this);
   }
+
   searchIngredient(e) {
     if(e.target.value) {
       this.props.searchIngredients(e.target.value);
     }
   }
-
-  addIngredient(e) {
-  
-      ingredientSuggestion.map(function(ingredient, index) {
-
-        return (
-          <li onClick={ () => { this.props.doesItWork(ingredient);} } key={index}>{ingredient.name}</li>
-        );
-        
-      })
-    
-    return (
-      <div></div>
-    );
-  } 
-
   renderSearchField(field) {
     const { meta: { touched, error } } = field;
     const colSize =  field.size ? field.size: '';
     const className = `form-group ${colSize} ${ touched && error ? ' has-error' : ''} `;
-    let ingredientSuggestion = [];  
-
-    if(this.props.ingredients && this.props.ingredients.data) {
-  
-      ingredientSuggestion = this.props.ingredients.data;
-    }
+   
     
     return (
       <div className={className}>
@@ -60,17 +39,44 @@ class SearchField extends Component {
       </div>
     );
   }
+  addIngredient(ingredients) { 
+    
+    let specificValue = (ins) => {
+      this.props.chosen(ins);
+     
+    };
+    return (
+      ingredients.map(function(ingredient, index) {
+        return (
+          <li onClick={() => specificValue(ingredient) } key={index}>{ingredient.name}</li>
+        );
+        
+      })
+    );
+  }
+
   render() {
+    let ingredientSuggestion = [];  
+
+    if(this.props.ingredients && this.props.ingredients.data) {
+  
+      ingredientSuggestion = this.props.ingredients.data;
+    }
+
     return (
       <div>
         <Field 
           name="test"
-          label="test dropdown"
+          label="Search Ingredient"
           component={ this.renderSearchField.bind(this) }
         />
-        <FieldList
-
-        />
+        <div>
+          <ul>
+            {
+              this.addIngredient(ingredientSuggestion)
+            }
+          </ul>
+        </div>
       </div>
     );
   }
