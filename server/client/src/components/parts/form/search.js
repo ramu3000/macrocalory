@@ -40,11 +40,13 @@ class SearchField extends Component {
     );
   }
   addIngredient(ingredients) { 
-    
+    let a = false;
     let specificValue = (ins) => {
       this.props.chosen(ins);
-     
+      a = true;
     };
+
+    if(a) {return (<div></div>)}
     return (
       ingredients.map(function(ingredient, index) {
         return (
@@ -71,7 +73,7 @@ class SearchField extends Component {
           component={ this.renderSearchField.bind(this) }
         />
         <div>
-          <ul>
+          <ul className="ingredients">
             {
               this.addIngredient(ingredientSuggestion)
             }

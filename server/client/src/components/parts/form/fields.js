@@ -95,7 +95,23 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
                       type="text"
                       placeholder="kcal"
                       component={renderField}
-                      label="kcal"
+                      label="kcal (per 100g)"
+                      size="col-xs-4 col-sm-5 col-md-2"
+                    />
+                    <Field 
+                      name={`${ingredient}.fat`}
+                      type="text"
+                      placeholder="fat"
+                      component={renderField}
+                      label="fat (per 100g)"
+                      size="col-xs-4 col-sm-5 col-md-2"
+                    />
+                    <Field 
+                      name={`${ingredient}.protein`}
+                      type="text"
+                      placeholder="protein"
+                      component={renderField}
+                      label="protein (per 100g)"
                       size="col-xs-4 col-sm-5 col-md-2"
                     />
                   </div>

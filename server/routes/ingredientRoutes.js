@@ -65,7 +65,7 @@ module.exports = app => {
             name: ingredient.name.en,
             protein: ingredient.protein,
             carbohydrate: ingredient.carbohydrate,
-            energy: ingredient.energyKcal,
+            kcal: ingredient.energyKcal,
             fat: ingredient.fat
           };
         });

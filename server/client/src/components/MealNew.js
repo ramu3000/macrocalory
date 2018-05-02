@@ -13,8 +13,7 @@ class MealNew extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {addedIng: []};
-    console.log('constructor',this.state)
+    this.chosenFood.bind(this);
   }
 
   addFatsecretValues() {
@@ -42,9 +41,6 @@ class MealNew extends Component {
       this.props.history.push('/meals');
     });
 
-
-  }
-  searchFieldClick(values){
 
   }
 
@@ -78,7 +74,7 @@ class MealNew extends Component {
             name="addIngredient"
             label="add custom ingredient"
             component={ renderSearchField }
-            chosen={this.chosenFood}
+            chosen={this.chosenFood.bind(this)}
           />
           <FieldArray name="ingredients" component={renderIngredients} />
           <div className="form__actions">
