@@ -90,6 +90,14 @@ export const renderIngredients = function({ fields, meta: {error, submitFailed}}
                       label="Quantity (g/ml)"
                       size="col-xs-8 col-sm-5 col-md-2" //bootstrap size 
                     />
+                    <Field 
+                      name={`${ingredient}.kcal`}
+                      type="text"
+                      placeholder="kcal"
+                      component={renderField}
+                      label="kcal"
+                      size="col-xs-4 col-sm-5 col-md-2"
+                    />
                   </div>
                 </div>
               </div>
