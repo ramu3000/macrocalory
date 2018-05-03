@@ -6,6 +6,8 @@ const keys = require('../config/keys');
 const User = mongoose.model('users');
 const Water = mongoose.model('waters');
 
+const WATER_TARGET_INITIAL_VALUE = 0;
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -39,6 +41,7 @@ passport.use(
       await new Water({
         _id: newWaterId,
         _user: user._id,
+        defaultTarget: WATER_TARGET_INITIAL_VALUE,
         dailyWaters: []
       }).save();
       done(null, user);

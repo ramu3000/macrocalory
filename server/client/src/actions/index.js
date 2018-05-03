@@ -13,6 +13,7 @@ import {
   CLEAR_TRENDS_DATA,
   FETCH_TRENDS_WATER_DATA,
   FETCH_TRENDS_MEALS_DATA,
+  FETCH_DEFAULT_WATER_TARGET,
   UPDATE_MEAL
 } from './types';
 
@@ -26,6 +27,27 @@ export const fetchUser = () => async dispatch => {
 
 export const chooseDate = date => dispatch => {
   dispatch({ type: CHOOSE_DATE, payload: date });
+};
+
+export const fetchDefaultWaterTarget = () => async dispatch => {
+  const url = '/api/water/target';
+  try {
+    const res = await axios.get(url);
+    dispatch({ type: FETCH_DEFAULT_WATER_TARGET, payload: res.data });
+  } catch (err) {
+    dispatch({ type: FETCH_DEFAULT_WATER_TARGET, payload: null });
+  }
+};
+
+export const setDefaultWaterTarget = target => async dispatch => {
+  const url = '/api/water/target';
+  const body = { target };
+  try {
+    await axios.post(url, body);
+    dispatch({ type: FETCH_DEFAULT_WATER_TARGET, payload: { defaultTarget: target } });
+  } catch (err) {
+    dispatch({ type: FETCH_DEFAULT_WATER_TARGET, payload: null });
+  }
 };
 
 const fetchMealsWithStrictInterval = async (after, before) => {
@@ -75,20 +97,20 @@ export const fetchDailyWater = date => async dispatch => {
   const url = '/api/water/' + day;
   try {
     const res = await axios.get(url);
-    dispatch({ type: FETCH_DAILY_WATER, payload: res.data.desiliters });
+    dispatch({ type: FETCH_DAILY_WATER, payload: res.data });
   } catch (err) {
     dispatch({ type: FETCH_DAILY_WATER, payload: null });
   }
 };
 
-export const setWater = (date, desiliters) => async dispatch => {
+export const setWater = (date, target, desiliters) => async dispatch => {
   // Use moment to get string representing day in local time
   const day = moment(date).format('YYYY-MM-DD');
   const url = '/api/water/' + day;
-  const body = { desiliters };
+  const body = { desiliters, target };
   try {
     await axios.post(url, body);
-    dispatch({ type: FETCH_DAILY_WATER, payload: desiliters });
+    dispatch({ type: FETCH_DAILY_WATER, payload: { target, desiliters } });
   } catch (err) {
     dispatch({ type: FETCH_DAILY_WATER, payload: null });
   }

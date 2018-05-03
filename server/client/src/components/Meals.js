@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import {
   fetchDailyMeals,
   fetchDailyWater,
+  fetchDefaultWaterTarget,
   deleteMeal,
   chooseDate
 } from '../actions';
@@ -30,12 +31,14 @@ class Meals extends Component {
     super(props);
 
     this.state = {
-      showMore: true
+      showMore: false
     };
   }
   componentDidMount() {
     this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
+    this.props.fetchDefaultWaterTarget();
+
   }
   async chooseDate(date) {
     // When typing on date picker bar, it generates undefined values
@@ -110,7 +113,7 @@ class Meals extends Component {
             placement="bottom"
             overlay={this.datepickerOverlay(this.chooseDate.bind(this))}
           >
-            <Button bsSize="small">
+            <Button bsSize="small" className="btn-calendar">
               <Glyphicon glyph="calendar" />
             </Button>
           </OverlayTrigger>
@@ -296,5 +299,6 @@ export default connect(mapsStateToProps, {
   chooseDate,
   fetchDailyMeals,
   fetchDailyWater,
+  fetchDefaultWaterTarget,
   deleteMeal
 })(Meals);

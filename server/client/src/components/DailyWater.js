@@ -8,48 +8,48 @@ import {
   Glyphicon,
   ProgressBar
 } from 'react-bootstrap';
-import { setWater } from '../actions';
+import { setWater, setDefaultWaterTarget, fetchDefaultWaterTarget } from '../actions';
 
 class DailyWater extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      TODO_dailyWaterGoal: 10,
-      TODO_currentWaterGoal: 20,
-      TODO_newCurrentWaterGoal: 20
-    };
-  }
 
   async incWater(increment) {
-    var newValue = this.props.water + increment;
+    var newValue = this.props.water.desiliters + increment;
     if (newValue < 0) {
       newValue = 0;
     }
-    await this.props.setWater(this.props.date, newValue);
+    await this.props.setWater(this.props.date, this.props.water.target, newValue);
   }
 
-  async incCurrentTarget(increment) {
-    var newValue = this.state.TODO_currentWaterGoal + increment;
+  async incDailyTarget(increment) {
+    var newValue = this.props.water.target + increment;
     if (newValue < 0) {
       newValue = 0;
     }
-    this.setState({ TODO_currentWaterGoal: newValue });
+    await this.props.setWater(this.props.date, newValue, this.props.water.desiliters);
   }
 
   async updateDailyTarget() {
-    this.setState({ TODO_dailyWaterGoal: this.state.TODO_currentWaterGoal });
+    await this.props.setWater(this.props.date, this.props.water.defaultTarget, this.props.water.desiliters);
   }
 
+  async incDefaultTarget(increment) {
+    var newValue = this.props.water.defaultTarget + increment;
+    if (newValue < 0) {
+      newValue = 0;
+    }
+    this.props.setDefaultWaterTarget(newValue);
+  }
+
+  
   renderProgressBarRow() {
-    if (this.state.TODO_dailyWaterGoal > 0) {
+    if (this.props.water.target > 0) {
       return (
         <Row>
           <ProgressBar
             striped
             bsStyle="info"
-            now={this.props.water}
-            max={this.state.TODO_dailyWaterGoal}
+            now={this.props.water.desiliters}
+            max={this.props.water.target}
           />
         </Row>
       );
@@ -61,7 +61,7 @@ class DailyWater extends Component {
       <Row>
         <Col xs={3} sm={1}>
           <Button
-            disabled={this.props.water <= 0}
+            disabled={this.props.water.desiliters <= 0}
             bsStyle="info"
             className="btn-water"
             onClick={this.incWater.bind(this, -5)}
@@ -71,7 +71,7 @@ class DailyWater extends Component {
         </Col>
         <Col xs={3} sm={1}>
           <Button
-            disabled={this.props.water <= 0}
+            disabled={this.props.water.desiliters <= 0}
             bsStyle="info"
             className="btn-water"
             onClick={this.incWater.bind(this, -1)}
@@ -120,7 +120,7 @@ class DailyWater extends Component {
               <Col xs={12}>
                 <h5>
                   This day's target:{' '}
-                  {(this.state.TODO_dailyWaterGoal / 10).toFixed(1)} liters
+                  {(this.props.water.target / 10).toFixed(1)} liters
                 </h5>
               </Col>
 
@@ -129,32 +129,47 @@ class DailyWater extends Component {
                   className="btn-sync-target"
                   onClick={this.updateDailyTarget.bind(this)}
                   disabled={
-                    this.state.TODO_currentWaterGoal ===
-                    this.state.TODO_dailyWaterGoal
+                    this.props.water.defaultTarget ===
+                    this.props.water.target
                   }
                 >
-                  Update to current
+                  Update to default
+                </Button>
+              </Col>
+              <Col xs={12}>
+                <Button
+                  className="btn-dec-target"
+                  onClick={this.incDailyTarget.bind(this, -1)}
+                  disabled={this.props.water.target <= 0}
+                >
+                  <Glyphicon glyph="minus" />
+                </Button>
+                <Button
+                  className="btn-inc-target"
+                  onClick={this.incDailyTarget.bind(this, 1)}
+                >
+                  <Glyphicon glyph="plus" />
                 </Button>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
                 <h5>
-                  Your current default target:{' '}
-                  {(this.state.TODO_currentWaterGoal / 10).toFixed(1)} liters
+                  Your default target:{' '}
+                  {(this.props.water.defaultTarget / 10).toFixed(1)} liters
                 </h5>
               </Col>
               <Col xs={12}>
                 <Button
                   className="btn-dec-target"
-                  onClick={this.incCurrentTarget.bind(this, -1)}
-                  disabled={this.TODO_currentWaterGoal <= 0}
+                  onClick={this.incDefaultTarget.bind(this, -1)}
+                  disabled={this.props.water.defaultTarget <= 0}
                 >
                   <Glyphicon glyph="minus" />
                 </Button>
                 <Button
                   className="btn-inc-target"
-                  onClick={this.incCurrentTarget.bind(this, 1)}
+                  onClick={this.incDefaultTarget.bind(this, 1)}
                 >
                   <Glyphicon glyph="plus" />
                 </Button>
@@ -170,8 +185,8 @@ class DailyWater extends Component {
     return (
       <div>
         <h4>
-          Water: {(this.props.water / 10).toFixed(1)} /{' '}
-          {(this.state.TODO_dailyWaterGoal / 10).toFixed(1)} liters (daily
+          Water: {(this.props.water.desiliters / 10).toFixed(1)} /{' '}
+          {(this.props.water.target / 10).toFixed(1)} liters (daily
           target)
         </h4>
         {this.renderWater()}
@@ -185,4 +200,4 @@ function mapsStateToProps({ date, water }) {
   return { date, water };
 }
 
-export default connect(mapsStateToProps, { setWater })(DailyWater);
+export default connect(mapsStateToProps, { setWater, setDefaultWaterTarget, fetchDefaultWaterTarget })(DailyWater);

@@ -2,6 +2,14 @@
   width: 40px;
 }
 
+.btn-calendar {
+  width: 40px;
+}
+
+.btn-show-more {
+  width: 40px;
+}
+
 .btn-meal-list {
   width: 45px;
   margin-left: 10px;
@@ -14,14 +22,6 @@
   margin-bottom: 5px;
   width: 45px;
   height: 45px;
-}
-
-.btn-toggle-targets {
-  margin-right: 5px;
-  margin-top: 15px;
-  width: 115px;
-  height: 45px;
-  font-weight: bold;
 }
 
 .btn-sync-target {
