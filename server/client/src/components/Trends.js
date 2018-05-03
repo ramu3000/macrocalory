@@ -38,7 +38,7 @@ class Trends extends Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleToggles = this.handleToggles.bind(this);
 
     this.state = {
       startDate: new Date(),
@@ -52,7 +52,7 @@ class Trends extends Component {
     this.props.clearTrendsData();
   }
 
-  handleChange(e) {
+  handleToggles(e) {
     this.setState({ toggles: e });
   }
 
@@ -360,7 +360,7 @@ class Trends extends Component {
           bsSize="xsmall"
           type="checkbox"
           value={this.state.toggles}
-          onChange={this.handleChange}
+          onChange={this.handleToggles}
           className="btn-chart-toggle"
         >
           <ToggleButton value={ENERGY}>Energy</ToggleButton>

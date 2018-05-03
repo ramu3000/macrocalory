@@ -26,6 +26,13 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import '../css/meals.css';
 
 class Meals extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showMore: true
+    };
+  }
   componentDidMount() {
     this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
@@ -53,6 +60,11 @@ class Meals extends Component {
         .toDate()
     );
   }
+
+  toggleShowMore() {
+    this.setState({ showMore: !this.state.showMore });
+  }
+
   editMeal(meal) {
     this.props.history.push(`meals/edit/${meal._id}`);
   }
@@ -102,6 +114,13 @@ class Meals extends Component {
               <Glyphicon glyph="calendar" />
             </Button>
           </OverlayTrigger>
+          <Button
+            bsSize="small"
+            onClick={this.toggleShowMore.bind(this)}
+            className="btn-show-more"
+          >
+            <Glyphicon glyph="edit" />
+          </Button>
         </ButtonToolbar>
       </Grid>
     );
@@ -253,7 +272,7 @@ class Meals extends Component {
   renderWater() {
     return (
       <Grid>
-        <DailyWater />
+        <DailyWater showTargetSettings={this.state.showMore} />
       </Grid>
     );
   }
