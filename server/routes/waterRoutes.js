@@ -17,7 +17,7 @@ module.exports = app => {
           .json({ error: 'No water document for the user!!!' });
       }
 
-      return res.status(200).json({ defaultTarget: water.defaultTarget});
+      return res.status(200).json({ defaultTarget: water.defaultTarget });
     } catch (err) {
       return res.status(500).json({ error: err });
     }
@@ -25,9 +25,9 @@ module.exports = app => {
 
   app.post('/api/water/target', requireLogin, async (req, res) => {
     try {
-      if (req.body.target < 0) {
+      if (req.body.target === undefined || req.body.target < 0) {
         return res.status(400).json({
-          error: 'Illegal params. Must be non-negative.'
+          error: 'Illegal params. Must contain non-negative target.'
         });
       }
 
@@ -48,7 +48,6 @@ module.exports = app => {
       return res.status(500).json({ error: err });
     }
   });
-
 
   app.get('/api/water', requireLogin, async (req, res) => {
     try {
@@ -96,7 +95,9 @@ module.exports = app => {
       if (dailyWater == null) {
         // If there is no dailyWater-document, we respond with zero desiliters
         // AND target value from user's "global" water settings
-        return res.status(200).json({ date: day, desiliters: 0, target: water.defaultTarget });
+        return res
+          .status(200)
+          .json({ date: day, desiliters: 0, target: water.defaultTarget });
       }
 
       return res.status(200).json(dailyWater);
@@ -115,9 +116,14 @@ module.exports = app => {
           day: day
         });
       }
-      if (req.body.desiliters < 0 || req.body.target < 0) {
+      if (
+        req.body.desiliters === undefined ||
+        req.body.target === undefined ||
+        req.body.desiliters < 0 ||
+        req.body.target < 0
+      ) {
         return res.status(400).json({
-          error: 'Illegal params. Must be non-negative.'
+          error: 'Illegal params. Must contain non-negative desiliters and target.'
         });
       }
 
@@ -131,34 +137,28 @@ module.exports = app => {
           .json({ error: 'No water document for the user!!!' });
       }
 
+      var newWater = { date: day, desiliters: req.body.desiliters, target: req.body.target };
+
       const dailyWater = water.dailyWaters.find(dw => {
         return dw.date === day;
       });
-
-      const desiliters = req.body.desiliters;
-      const target = req.body.target;
-      if (dailyWater == null) {
+      if (dailyWater === null) {
         // We save new subdocument
         // Take the day from params
-        water.dailyWaters.push({
-          date: day,
-          desiliters: desiliters,
-          target: target
-        });
+        water.dailyWaters.push(newWater);
         await water.save();
-
-        return res.status(200).json({ message: 'Saved new daily water' });
+        return res.status(200).json({ message: 'Saved new daily water', water: dailyWater });
       } else {
-        if (desiliters === 0) {
-          // If desiliters is zero, we remove the document
+        if (newWater.desiliters === 0 && newWater.target === water.defaultTarget) {
+          // If desiliters is zero and target equals default target, 
+          // we remove the document
           water.dailyWaters.id(dailyWater._id).remove();
         } else {
           // We overwrite the subdocument
-          dailyWater.desiliters = desiliters;
-          dailyWater.target = target;
+          Object.assign(dailyWater, newWater);
         }
         await water.save();
-        return res.status(200).json({ message: 'Updated daily water' });
+        return res.status(200).json({ message: 'Updated daily water', water: dailyWater });
       }
     } catch (err) {
       return res.status(500).json({ error: err });
