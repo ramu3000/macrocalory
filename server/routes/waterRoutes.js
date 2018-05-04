@@ -92,7 +92,7 @@ module.exports = app => {
         return dw.date === day;
       });
 
-      if (dailyWater == null) {
+      if (dailyWater === null || dailyWater === undefined) {
         // If there is no dailyWater-document, we respond with zero desiliters
         // AND target value from user's "global" water settings
         return res
@@ -142,7 +142,7 @@ module.exports = app => {
       const dailyWater = water.dailyWaters.find(dw => {
         return dw.date === day;
       });
-      if (dailyWater === null) {
+      if (dailyWater === null || dailyWater === undefined) {
         // We save new subdocument
         // Take the day from params
         water.dailyWaters.push(newWater);
