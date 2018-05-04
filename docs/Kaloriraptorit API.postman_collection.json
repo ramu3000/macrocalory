@@ -102,7 +102,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"target\": 10\n}"
+							"raw": "{\n\t\"target\": -7\n}"
 						},
 						"description": ""
 					},
@@ -122,7 +122,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"target\": 10\n}"
+							"raw": "{\n\t\"taget\": 10\n}"
 						},
 						"description": ""
 					},
@@ -131,8 +131,8 @@
 				{
 					"name": "Water: Set the daily water document correctly.",
 					"request": {
-						"url": "localhost:5000/api/water/2018-04-01",
-						"method": "GET",
+						"url": "localhost:5000/api/water/2018-05-03",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -142,7 +142,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"desiliters\": 6,\n\t\"target\": 5\n}"
+							"raw": "{\n\t\"desiliters\": 6,\n\t\"target\": 4\n}"
 						},
 						"description": ""
 					},
