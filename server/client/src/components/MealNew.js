@@ -16,32 +16,13 @@ class MealNew extends Component {
     this.chosenFood.bind(this);
   }
 
-  addFatsecretValues() {
-    //dummy values for now
-    //Placeholder for values that fatsecret gives
-    return {
-      kcal: 200, //     
-      protein: .5, //grams
-      carbohydrate:  40, //grams
-      fat: 20.12
-    };
-  }
 
 
   onSubmit(values){
 
-    let newValues =_.map(values.ingredients, ingredient => {
-      const obj = {};
-      _.merge(obj,ingredient,this.addFatsecretValues());
-      return obj;
-    });
-    values.ingredients = newValues;
-    //send to action
     this.props.createMeal(values, () => {
       this.props.history.push('/meals');
     });
-
-
   }
 
   chosenFood(e) {

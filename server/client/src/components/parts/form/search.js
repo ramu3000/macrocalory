@@ -31,7 +31,9 @@ class SearchField extends Component {
           type="text"
           {...field.input} //generate all input events, like equliant to examples of: onChange={field.input.onChange} or onFocus={field.input.onFocus} or onBlur....
           onBlur={(e) => {
-            this.searchIngredient(e);
+            if((e.target.value).length >= 3){
+              this.searchIngredient(e);
+            }
           }}
         />
         
@@ -39,18 +41,19 @@ class SearchField extends Component {
       </div>
     );
   }
-  addIngredient(ingredients) { 
-    let a = false;
+  addIngredient() { 
+
     let specificValue = (ins) => {
       this.props.chosen(ins);
-      a = true;
     };
-
-    if(a) {return (<div></div>)}
+    console.log(this.props);
+    if(this.props.ingredients.length === 0 ) {
+      return <div></div>;
+    }
     return (
-      ingredients.map(function(ingredient, index) {
+      this.props.ingredients.data.map(function(ingredient, index) {
         return (
-          <li onClick={() => specificValue(ingredient) } key={index}>{ingredient.name}</li>
+          <li className="list-group-item" onClick={() => specificValue(ingredient) } key={index}>{ingredient.name}</li>
         );
         
       })
@@ -58,12 +61,6 @@ class SearchField extends Component {
   }
 
   render() {
-    let ingredientSuggestion = [];  
-
-    if(this.props.ingredients && this.props.ingredients.data) {
-  
-      ingredientSuggestion = this.props.ingredients.data;
-    }
 
     return (
       <div>
@@ -73,9 +70,9 @@ class SearchField extends Component {
           component={ this.renderSearchField.bind(this) }
         />
         <div>
-          <ul className="ingredients">
+          <ul className="ingredients list-group list-group-hover list-product-search scrollbar">
             {
-              this.addIngredient(ingredientSuggestion)
+              this.addIngredient()
             }
           </ul>
         </div>

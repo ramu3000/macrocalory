@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
-import { fetchMeal, updateMeal } from '../actions';
-import moment from 'moment';
 import _ from 'lodash';
+import { fetchMeal, updateMeal } from '../actions';
+import renderSearchField from './parts/form/search';
 
 
 import { renderField, renderDateField, renderIngredients } from './parts/form/fields';
@@ -14,32 +14,18 @@ class MealEdit extends Component {
   componentDidMount() {
     this.props.fetchMeal(this.props.match.params.id);
   }
-  addFatsecretValues() {
-    //dummy values for now
-    //Placeholder for values that fatsecret gives
-    return {
-      kcal: 200, //     
-      protein: .5, //grams
-      carbohydrate:  40, //grams
-      fat: 20.12
-    };
-  }
 
   onSubmit(values){
-    console.log(values);
-
-    let newValues =_.map(values.ingredients, ingredient => {
-      const obj = {};
-      _.merge(obj,ingredient,this.addFatsecretValues());
-      return obj;
-    });
-    values.ingredients = newValues;
     //send to action
     this.props.updateMeal(this.props.match.params.id, values, () => {
       this.props.history.push('/meals');
     });
 
 
+  }
+
+  chosenFood(e) {
+    this.props.array.push('ingredients', e);
   }
     
   render() {
@@ -69,6 +55,12 @@ class MealEdit extends Component {
               showTime={true}
             />
           </div>
+          <Field 
+            name="addIngredient"
+            label="add custom ingredient"
+            component={ renderSearchField }
+            chosen={this.chosenFood.bind(this)}
+          />
           <FieldArray name="ingredients" component={renderIngredients} />
           <div className="form__actions">
             <button type="submit" className="btn btn-success">Save your meal</button>

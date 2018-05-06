@@ -57,15 +57,16 @@ form ul {
   margin:25px -15px;
 }
 
+
 ul.ingredients {
   max-height: 400px;
   min-width: 300px;
   max-width: 500px;
+  z-index: 5;
   overflow: auto;
-  color: black;
-  background-color: white;
+  position: absolute;
   margin-top: -15px;
 }
 .ingredients li {
-  border-bottom: 1px solid #ccc;
+  cursor:pointer;
 }
