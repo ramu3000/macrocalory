@@ -36,7 +36,7 @@ class MealNew extends Component {
           newFoodInfo[prop] = foodInfo[prop];
           break; 
         default:
-          newFoodInfo[prop] = Math.round(foodInfo[prop]*1000)/1000;
+          newFoodInfo[prop] = Number(Math.round(foodInfo[prop]+'e2')+'e-2');
 
       } 
     }
