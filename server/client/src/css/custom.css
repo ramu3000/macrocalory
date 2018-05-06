@@ -60,3 +60,15 @@ form ul {
 .popover {
   max-width: 300px;
 }
+ul.ingredients {
+  max-height: 400px;
+  min-width: 300px;
+  max-width: 500px;
+  z-index: 5;
+  overflow: auto;
+  position: absolute;
+  margin-top: -15px;
+}
+.ingredients li {
+  cursor:pointer;
+}

@@ -62,10 +62,10 @@ module.exports = app => {
         const filteredData = response.data.map(ingredient => {
           return {
             fineliId: ingredient.id,
-            name: ingredient.name.en,
+            name: ingredient.name.fi,
             protein: ingredient.protein,
             carbohydrate: ingredient.carbohydrate,
-            energy: ingredient.energyKcal,
+            kcal: ingredient.energyKcal,
             fat: ingredient.fat
           };
         });

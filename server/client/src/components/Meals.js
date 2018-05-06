@@ -199,7 +199,7 @@ class Meals extends Component {
     });
     return (
       <Panel key={meal._id} bsStyle="success">
-        <Panel.Heading>
+        <Panel.Heading key={meal._id}>
           <Row key={meal._id}>
             <Col xs={2}>{timeStr}</Col>
             <Panel.Toggle>

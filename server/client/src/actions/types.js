@@ -9,5 +9,6 @@ export const FETCH_MEAL = 'fetch_meal';
 export const UPDATE_MEAL = 'update_meal';
 export const CLEAR_TRENDS_DATA = 'clear_trends_data';
 export const FETCH_TRENDS_WATER_DATA = 'fetch_trends_water_data';
-export const FETCH_TRENDS_MEALS_DATA = 'fetch_trends_meals_data';
 export const FETCH_DEFAULT_WATER_TARGET = 'fetch_default_water_target';
+export const FETCH_INGREDIENTS = 'fetch_ingredients';
+export const FETCH_TRENDS_MEALS_DATA = 'fetch_trends_meals_data';
