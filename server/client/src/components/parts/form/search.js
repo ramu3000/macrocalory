@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, formValueSelector  } from 'redux-form';
-
+import _ from 'lodash';
 import { searchIngredients } from '../../../actions';
 
 
@@ -73,14 +73,15 @@ class SearchField extends Component {
   }
 
   render() {
-    console.log(this.state);
+
+    const foodSearch = _.debounce((this.searchIngredient.bind(this)),300)
     return (
       <div>
         <Field 
           name="searchIngredient"
           label="Search Ingredient"
           component={ renderSearchField }
-          onChange={this.searchIngredient.bind(this)}
+          onChange={foodSearch}
           value={this.state.foodsearch && ''}
         />
         <div>
