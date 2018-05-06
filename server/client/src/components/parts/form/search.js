@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, formValueSelector  } from 'redux-form';
+import { Field  } from 'redux-form';
 import _ from 'lodash';
 import { searchIngredients } from '../../../actions';
 
@@ -9,8 +9,9 @@ const  renderSearchField = (field) => {
   const { meta: { touched, error } } = field;
   const colSize =  field.size ? field.size: '';
   const className = `form-group ${colSize} ${ touched && error ? ' has-error' : ''} `;
-  
+  console.log(field);
   return (
+    
     <div className={className}>
       <label>{field.label}</label>
       <input
@@ -18,8 +19,9 @@ const  renderSearchField = (field) => {
         placeholder={field.placeholder ? field.placeholder: ''}
         className="form-control"
         type="text"
-
+        
         {...field.input} //generate all input events, like equliant to examples of: onChange={field.input.onChange} or onFocus={field.input.onFocus} or onBlur....
+
       />
       
       <div className="help-block">{touched ? error: ''}</div>
@@ -82,12 +84,11 @@ class SearchField extends Component {
           label="Search Ingredient"
           component={ renderSearchField }
           onChange={foodSearch}
-          value={this.state.foodsearch && ''}
         />
         <div>
           <ul className="ingredients list-group list-group-hover list-product-search scrollbar">
             {
-              this.state.foodsearch.length > 3 && this.addIngredient()
+              this.state.foodsearch.length >= 3 && this.addIngredient()
             }
           </ul>
         </div>

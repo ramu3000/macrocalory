@@ -25,8 +25,22 @@ class MealNew extends Component {
     });
   }
 
-  chosenFood(e) {
-    this.props.array.push('ingredients', e);
+  chosenFood(foodInfo) {
+    let newFoodInfo = {};
+    for(let prop in foodInfo) { 
+      switch(prop) {  
+        case 'name':
+          newFoodInfo[prop] = foodInfo[prop];
+          break;
+        case 'fineliId':
+          newFoodInfo[prop] = foodInfo[prop];
+          break; 
+        default:
+          newFoodInfo[prop] = Math.round(foodInfo[prop]*1000)/1000;
+
+      } 
+    }
+    this.props.array.push('ingredients', newFoodInfo);
   }
   
   render(){
