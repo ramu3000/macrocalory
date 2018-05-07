@@ -26,6 +26,8 @@ import { Calendar } from 'react-date-range';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import '../css/meals.css';
 
+const NUM_OF_DECIMALS = 1;
+
 class Meals extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +36,7 @@ class Meals extends Component {
       showMore: false
     };
   }
+
   componentDidMount() {
     this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
@@ -135,19 +138,23 @@ class Meals extends Component {
           {ingredient.name}
         </Col>
         <Col className="col-mass" xs={3} sm={3}>
-          {ingredient.mass}g
+          {ingredient.mass.toFixed(NUM_OF_DECIMALS)}g
         </Col>
         <Col className="col-ch" xs={3} sm={1}>
-          {ingredient.carbohydrate * ingredient.mass / 100}g
+          {(ingredient.carbohydrate * ingredient.mass / 100).toFixed(
+            NUM_OF_DECIMALS
+          )}g
         </Col>
         <Col className="col-fat" xs={3} sm={1}>
-          {ingredient.fat * ingredient.mass / 100}g
+          {(ingredient.fat * ingredient.mass / 100).toFixed(NUM_OF_DECIMALS)}g
         </Col>
         <Col className="col-protein" xs={3} sm={1}>
-          {ingredient.protein * ingredient.mass / 100}g
+          {(ingredient.protein * ingredient.mass / 100).toFixed(
+            NUM_OF_DECIMALS
+          )}g
         </Col>
         <Col className="col-kcal" xs={3} sm={2}>
-          {ingredient.kcal * ingredient.mass / 100}kcal
+          {(ingredient.kcal * ingredient.mass / 100).toFixed(NUM_OF_DECIMALS)}kcal
         </Col>
       </Row>
     );
@@ -163,9 +170,9 @@ class Meals extends Component {
       protein += ingredient.protein * ingredient.mass / 100;
     });
     const data = [
-      { name: 'Carbohydrate', value: carbohydrate },
-      { name: 'Fat', value: fat },
-      { name: 'Protein', value: protein }
+      { name: 'Carbohydrate', value: Math.round(carbohydrate * 10) / 10 },
+      { name: 'Fat', value: Math.round(fat * 10) / 10 },
+      { name: 'Protein', value: Math.round(protein * 10) / 10 }
     ];
     const colors = ['#0066ff', '#ff0000', '#669900'];
 
@@ -204,7 +211,7 @@ class Meals extends Component {
             <Panel.Toggle>
               <Col xs={4}>{meal.name}</Col>
             </Panel.Toggle>
-            <Col xs={2}>{energy} kcal</Col>
+            <Col xs={2}>{energy.toFixed(NUM_OF_DECIMALS)} kcal</Col>
             <Col xs={4} align="right">
               <Button
                 className="btn-meal-list"
@@ -251,7 +258,7 @@ class Meals extends Component {
     return (
       <Grid>
         <h4>
-          {this.props.meals.length} meals today, {totalCalories} kcal
+          {this.props.meals.length} meals today, {totalCalories.toFixed(NUM_OF_DECIMALS)} kcal
         </h4>
         <Grid>
           {_.map(_.sortBy(this.props.meals, ['date']), meal => {
