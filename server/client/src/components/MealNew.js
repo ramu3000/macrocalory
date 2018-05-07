@@ -38,7 +38,7 @@ class MealNew extends Component {
           newFoodInfo[prop] = Number(Math.round(foodInfo[prop] + 'e2') + 'e-2');
       }
     }
-    this.props.array.push('ingredients', newFoodInfo);
+    this.props.array.unshift('ingredients', newFoodInfo);
   }
 
   render() {
