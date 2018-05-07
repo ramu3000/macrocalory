@@ -278,19 +278,20 @@
 					"name": "Ingredients: Get ingredients correctly.",
 					"request": {
 						"url": {
-							"raw": "localhost:5000/api/ingredients?q=a",
+							"raw": "localhost:5000/api/fineli/foods?q=kaurapuuro",
 							"host": [
 								"localhost"
 							],
 							"port": "5000",
 							"path": [
 								"api",
-								"ingredients"
+								"fineli",
+								"foods"
 							],
 							"query": [
 								{
 									"key": "q",
-									"value": "a",
+									"value": "kaurapuuro",
 									"equals": true,
 									"description": ""
 								}
@@ -316,7 +317,7 @@
 				{
 					"name": "Ingredients: Get ingredients with query missing.",
 					"request": {
-						"url": "localhost:5000/api/ingredients",
+						"url": "localhost:5000/api/fineli/foods",
 						"method": "GET",
 						"header": [
 							{
