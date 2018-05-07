@@ -71,13 +71,17 @@ class SearchField extends Component {
   render() {
     const foodSearch = _.debounce(this.searchIngredient.bind(this), 300);
     return (
-      <div>
-        <Field
-          name="searchIngredient"
-          label="Search Ingredient"
-          component={renderSearchField}
-          onChange={foodSearch}
-        />
+      <div className="">
+        <div className="row">
+          <div className="col-md-4">
+            <Field
+              name="searchIngredient"
+              label="Search Ingredient"
+              component={renderSearchField}
+              onChange={foodSearch}
+            />
+          </div>
+        </div>
         <div>
           <ul className="ingredients list-group list-group-hover list-product-search scrollbar">
             {this.state.foodsearch.length >= 3 && this.addIngredient()}

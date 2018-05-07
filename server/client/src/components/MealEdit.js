@@ -16,16 +16,6 @@ class MealEdit extends Component {
   componentDidMount() {
     this.props.fetchMeal(this.props.match.params.id);
   }
-  addFatsecretValues() {
-    //dummy values for now
-    //Placeholder for values that fatsecret gives
-    return {
-      kcal: 200, //
-      protein: 0.5, //grams
-      carbohydrate: 40, //grams
-      fat: 20.12
-    };
-  }
 
   onSubmit(values) {
     //send to action
@@ -45,10 +35,10 @@ class MealEdit extends Component {
           newFoodInfo[prop] = foodInfo[prop];
           break;
         default:
-          newFoodInfo[prop] = Math.round(foodInfo[prop] * 1000) / 1000;
+          newFoodInfo[prop] = Number(Math.round(foodInfo[prop] + 'e2') + 'e-2');
       }
     }
-    this.props.array.push('ingredients', newFoodInfo);
+    this.props.array.unshift('ingredients', newFoodInfo);
   }
 
   render() {
@@ -58,9 +48,7 @@ class MealEdit extends Component {
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
       <div>
-        <Link className="btn btn-primary" to="/meals">
-          go back
-        </Link>
+
         <h2>Edit your Meal - {this.props.meals.name}</h2>
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <div className="row">
@@ -68,14 +56,14 @@ class MealEdit extends Component {
               name="name"
               label="Meal name"
               component={renderField}
-              size="col-xs-4"
+              size="col-xs-10 col-sm-5 col-md-3"
             />
             <Field
               name="date"
               label="Date & Time"
               placeholder="YYYY-MM-DD"
               component={renderDateField}
-              size="col-xs-3"
+              size="col-xs-10 col-sm-5 col-md-3"
               showTime={true}
             />
           </div>
@@ -98,6 +86,9 @@ class MealEdit extends Component {
             >
               back to default
             </button>
+            <Link className="btn btn-primary" to="/meals">
+              go back
+            </Link>
           </div>
         </form>
       </div>

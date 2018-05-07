@@ -65,7 +65,35 @@ ul.ingredients {
   overflow: auto;
   position: absolute;
   margin-top: -15px;
+  
 }
 .ingredients li {
   cursor: pointer;
+}
+.remove-ingredient {
+  border-radius: 25px;
+  padding: 6px 9px;
+  position: absolute;
+  top: -28px;
+  right: -7px;
+}
+li > div.ingredient {
+  margin: 20px 0px;
+    padding: 20px 0px;
+    padding-left: 10px;
+    /* border: 1px solid beige; */
+    background: linear-gradient(to right, rgb(208, 255, 225)61%, rgba(180, 232, 200, 0.44));
+    border-radius: 5px;
+    position: relative;
+    width: 80%;
+}
+@media (max-width: 992px){
+  li > div.ingredient {
+    width: 90%;
+  }
+}
+@media (max-width: 768px){
+  li > div.ingredient {
+    width: 100%;
+  }
 }

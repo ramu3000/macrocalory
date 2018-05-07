@@ -4,7 +4,12 @@ import moment from 'moment';
 import { DateTimePicker } from 'react-widgets';
 import momentLocaliser from 'react-widgets-moment';
 import 'react-widgets/dist/css/react-widgets.css';
+import {
+  Panel,
+  Glyphicon
+} from 'react-bootstrap';
 momentLocaliser(moment);
+
 
 //field parameter handles all events properties for Field component
 export const renderField = function(field) {
@@ -60,30 +65,32 @@ export const renderIngredients = function({
 }) {
   return (
     <div>
+      <button
+        className="btn btn-primary"
+        type="button"
+        onClick={() => fields.unshift({})}
+      >
+        Or add custom ingredient
+      </button>
       <ul>
         <li>{submitFailed && error && <span>{error}</span>}</li>
+
         {fields.map(function(ingredient, index) {
           return (
             <li key={index}>
+              <h4>{`Ingredient #${fields.length - index} `}</h4>
+              
               <div className="row ingredient">
-                <div className="col-sm-1">
-                  <button
-                    className="btn btn-danger remove-ingredient"
-                    type="button"
-                    title="Remove ingredient"
-                    onClick={() => fields.remove(index)}
-                  >
-                    X
-                  </button>
-                </div>
-                <div className="col-sm-11">
+               
+                <div className="col-sm-12">
+                  
                   <div className="row">
                     <Field
                       name={`${ingredient}.name`}
                       type="text"
                       placeholder="type an ingredient"
                       component={renderField}
-                      label={`Ingredient #${index + 1}`}
+                      label={'Ingredient name'}
                       size="col-md-4" //bootstrap size
                     />
                     <Field
@@ -92,34 +99,61 @@ export const renderIngredients = function({
                       placeholder="100"
                       component={renderField}
                       label="Quantity (g/ml)"
-                      size="col-xs-8 col-sm-5 col-md-2" //bootstrap size
-                    />
-                    <Field
-                      name={`${ingredient}.kcal`}
-                      type="text"
-                      placeholder="kcal"
-                      component={renderField}
-                      label="kcal (per 100g)"
-                      size="col-xs-4 col-sm-5 col-md-2"
-                    />
-                    <Field
-                      name={`${ingredient}.fat`}
-                      type="text"
-                      placeholder="fat"
-                      component={renderField}
-                      label="fat (per 100g)"
-                      size="col-xs-4 col-sm-5 col-md-2"
-                    />
-                    <Field
-                      name={`${ingredient}.protein`}
-                      type="text"
-                      placeholder="protein"
-                      component={renderField}
-                      label="protein (per 100g)"
-                      size="col-xs-4 col-sm-5 col-md-2"
+                      size="col-xs-5 col-sm-4 col-md-2" //bootstrap size
                     />
                   </div>
+                  <div className="row">
+                    <Panel  bsStyle="success">
+                      <Panel.Heading>
+                        <Panel.Toggle>Edit nutritions (per 100g) </Panel.Toggle>
+                      </Panel.Heading>
+                      <Panel.Collapse>
+                        <Panel.Body>
+                          <Field
+                            name={`${ingredient}.kcal`}
+                            type="text"
+                            placeholder="add calories (per 100g)"
+                            component={renderField}
+                            label="kcal "
+                            size="col-xs-6 col-sm-2 col-md-2"
+                          />
+                          <Field
+                            name={`${ingredient}.fat`}
+                            type="text"
+                            placeholder="add fat in grams  (per 100g)"
+                            component={renderField}
+                            label="fat"
+                            size="col-xs-6 col-sm-2 col-md-2"
+                          />
+                          <Field
+                            name={`${ingredient}.protein`}
+                            type="text"
+                            placeholder="add protein in grams (per 100g)"
+                            component={renderField}
+                            label="Protein"
+                            size="col-xs-6 col-sm-2 col-md-2"
+                          />
+                          <Field
+                            name={`${ingredient}.carbohydrate`}
+                            type="text"
+                            placeholder="add carbs i grams (per 100g)"
+                            component={renderField}
+                            label="Carbohydrate"
+                            size="col-xs-6 col-sm-2 col-md-2"
+                          />
+                        </Panel.Body>
+                      </Panel.Collapse>
+                    </Panel>
+                  </div>
                 </div>
+                <button
+                  className="btn btn-danger remove-ingredient"
+                  type="button"
+                  title="Remove ingredient"
+                  onClick={() => fields.remove(index)}
+                >
+                  <Glyphicon glyph="remove" />
+                </button>
               </div>
             </li>
           );
@@ -127,13 +161,7 @@ export const renderIngredients = function({
       </ul>
       <div className="row ingredient-actions">
         <div className="col-sm-6">
-          <button
-            className="btn btn-primary"
-            type="button"
-            onClick={() => fields.push({})}
-          >
-            Add ingredient
-          </button>
+   
         </div>
       </div>
     </div>
