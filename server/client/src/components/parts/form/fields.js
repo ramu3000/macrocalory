@@ -94,7 +94,7 @@ export const renderIngredients = function({
                       label="Quantity (g/ml)"
                       size="col-xs-8 col-sm-5 col-md-2" //bootstrap size
                     />
-                    <Field 
+                    <Field
                       name={`${ingredient}.kcal`}
                       type="text"
                       placeholder="kcal"
@@ -102,7 +102,7 @@ export const renderIngredients = function({
                       label="kcal (per 100g)"
                       size="col-xs-4 col-sm-5 col-md-2"
                     />
-                    <Field 
+                    <Field
                       name={`${ingredient}.fat`}
                       type="text"
                       placeholder="fat"
@@ -110,7 +110,7 @@ export const renderIngredients = function({
                       label="fat (per 100g)"
                       size="col-xs-4 col-sm-5 col-md-2"
                     />
-                    <Field 
+                    <Field
                       name={`${ingredient}.protein`}
                       type="text"
                       placeholder="protein"

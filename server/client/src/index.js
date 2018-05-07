@@ -10,10 +10,15 @@ import './css/custom.css';
 import App from './components/App';
 import reducers from './reducers';
 
-const store = createStore(reducers, {}, composeWithDevTools(
-  applyMiddleware(reduxThunk)
-));
+const store = createStore(
+  reducers,
+  {},
+  composeWithDevTools(applyMiddleware(reduxThunk))
+);
 
 ReactDOM.render(
-  <Provider store={store}><App /></Provider>,
-  document.querySelector('#root'));
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector('#root')
+);

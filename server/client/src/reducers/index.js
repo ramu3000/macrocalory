@@ -14,5 +14,5 @@ export default combineReducers({
   water: waterReducer,
   form: formReducer,
   trends: trendsReducer,
-  ingredients: ingredientsReducer,
+  ingredients: ingredientsReducer
 });

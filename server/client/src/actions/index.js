@@ -45,7 +45,10 @@ export const setDefaultWaterTarget = target => async dispatch => {
   const body = { target };
   try {
     await axios.post(url, body);
-    dispatch({ type: FETCH_DEFAULT_WATER_TARGET, payload: { defaultTarget: target } });
+    dispatch({
+      type: FETCH_DEFAULT_WATER_TARGET,
+      payload: { defaultTarget: target }
+    });
   } catch (err) {
     dispatch({ type: FETCH_DEFAULT_WATER_TARGET, payload: null });
   }
@@ -147,7 +150,7 @@ export const updateMeal = (mealId, values, callback) => async dispatch => {
   dispatch({ type: UPDATE_MEAL, payload: res.data });
 };
 
-export const searchIngredients = (query) => async dispatch => {
+export const searchIngredients = query => async dispatch => {
   const res = await axios.get(`/api/fineli/foods?q=${query}`);
-  dispatch( {  type: FETCH_INGREDIENTS, payload: res.data });
+  dispatch({ type: FETCH_INGREDIENTS, payload: res.data });
 };

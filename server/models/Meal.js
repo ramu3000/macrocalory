@@ -7,8 +7,7 @@ const mealSchema = new Schema({
   name: { type: String, required: true },
   date: { type: Date, required: true },
   ingredients: { type: [MealIngredientSchema], required: true },
-  _user: { type: Schema.Types.ObjectId , ref: 'User', required: true }
+  _user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
-
 
 mongoose.model('meals', mealSchema);

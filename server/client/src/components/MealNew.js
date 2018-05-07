@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { createMeal } from '../actions';
 
-import { renderField, renderDateField, renderIngredients } from './parts/form/fields';
+import {
+  renderField,
+  renderDateField,
+  renderIngredients
+} from './parts/form/fields';
 
 import renderSearchField from './parts/form/search';
 import validate from './parts/form/validate';
 
 class MealNew extends Component {
-
   constructor(props) {
     super(props);
     this.chosenFood.bind(this);
   }
 
-
-
-  onSubmit(values){
-
+  onSubmit(values) {
     this.props.createMeal(values, () => {
       this.props.history.push('/meals');
     });
@@ -27,18 +26,17 @@ class MealNew extends Component {
 
   chosenFood(foodInfo) {
     let newFoodInfo = {};
-    for(let prop in foodInfo) { 
-      switch(prop) {  
+    for (let prop in foodInfo) {
+      switch (prop) {
         case 'name':
           newFoodInfo[prop] = foodInfo[prop];
           break;
         case 'fineliId':
           newFoodInfo[prop] = foodInfo[prop];
-          break; 
+          break;
         default:
-          newFoodInfo[prop] = Number(Math.round(foodInfo[prop]+'e2')+'e-2');
-
-      } 
+          newFoodInfo[prop] = Number(Math.round(foodInfo[prop] + 'e2') + 'e-2');
+      }
     }
     this.props.array.push('ingredients', newFoodInfo);
   }
@@ -65,10 +63,10 @@ class MealNew extends Component {
               showTime={true}
             />
           </div>
-          <Field 
+          <Field
             name="addIngredient"
             label="add custom ingredient"
-            component={ renderSearchField }
+            component={renderSearchField}
             chosen={this.chosenFood.bind(this)}
           />
           <FieldArray name="ingredients" component={renderIngredients} />
@@ -93,7 +91,7 @@ class MealNew extends Component {
 
 //getting props to this component
 function mapsStateToProps({ date, ingredients }) {
-  return {  date, ingredients };
+  return { date, ingredients };
 }
 
 export default reduxForm({
@@ -102,5 +100,5 @@ export default reduxForm({
   form: 'mealForm'
 })(
   //and add redux connection
-  connect(mapsStateToProps, {createMeal })(MealNew)
+  connect(mapsStateToProps, { createMeal })(MealNew)
 );

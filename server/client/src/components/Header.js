@@ -5,7 +5,6 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import '../css/navbar.css';
 
 class Header extends Component {
-  
   isLoggedIn() {
     if (this.props.auth.data === null) {
       return false;
@@ -18,8 +17,7 @@ class Header extends Component {
   isLoadingAuth() {
     return this.props.auth.isLoading === true;
   }
-  
-  
+
   renderAuthNav() {
     if (this.isLoadingAuth()) {
       return null;
@@ -32,7 +30,9 @@ class Header extends Component {
     }
     return (
       <Nav pullRight>
-        <NavItem href="/api/logout">Logout: {this.props.auth.data.name}</NavItem>
+        <NavItem href="/api/logout">
+          Logout: {this.props.auth.data.name}
+        </NavItem>
       </Nav>
     );
   }

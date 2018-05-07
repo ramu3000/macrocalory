@@ -123,7 +123,8 @@ module.exports = app => {
         req.body.target < 0
       ) {
         return res.status(400).json({
-          error: 'Illegal params. Must contain non-negative desiliters and target.'
+          error:
+            'Illegal params. Must contain non-negative desiliters and target.'
         });
       }
 
@@ -137,7 +138,11 @@ module.exports = app => {
           .json({ error: 'No water document for the user!!!' });
       }
 
-      var newWater = { date: day, desiliters: req.body.desiliters, target: req.body.target };
+      var newWater = {
+        date: day,
+        desiliters: req.body.desiliters,
+        target: req.body.target
+      };
 
       const dailyWater = water.dailyWaters.find(dw => {
         return dw.date === day;
@@ -147,10 +152,15 @@ module.exports = app => {
         // Take the day from params
         water.dailyWaters.push(newWater);
         await water.save();
-        return res.status(200).json({ message: 'Saved new daily water', water: dailyWater });
+        return res
+          .status(200)
+          .json({ message: 'Saved new daily water', water: dailyWater });
       } else {
-        if (newWater.desiliters === 0 && newWater.target === water.defaultTarget) {
-          // If desiliters is zero and target equals default target, 
+        if (
+          newWater.desiliters === 0 &&
+          newWater.target === water.defaultTarget
+        ) {
+          // If desiliters is zero and target equals default target,
           // we remove the document
           water.dailyWaters.id(dailyWater._id).remove();
         } else {
@@ -158,7 +168,9 @@ module.exports = app => {
           Object.assign(dailyWater, newWater);
         }
         await water.save();
-        return res.status(200).json({ message: 'Updated daily water', water: dailyWater });
+        return res
+          .status(200)
+          .json({ message: 'Updated daily water', water: dailyWater });
       }
     } catch (err) {
       return res.status(500).json({ error: err });

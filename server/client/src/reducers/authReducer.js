@@ -8,9 +8,9 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case CHECKING_AUTHENTICATION:
-      return {...initialState, isLoading: true};
+      return { ...initialState, isLoading: true };
     case USER_DATA:
-      return { data: action.payload, isLoading: false};
+      return { data: action.payload, isLoading: false };
     default:
       return state;
   }

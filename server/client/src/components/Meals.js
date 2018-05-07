@@ -38,7 +38,6 @@ class Meals extends Component {
     this.props.fetchDailyMeals(this.props.date);
     this.props.fetchDailyWater(this.props.date);
     this.props.fetchDefaultWaterTarget();
-
   }
   async chooseDate(date) {
     // When typing on date picker bar, it generates undefined values
