@@ -51,7 +51,7 @@ export const renderDateField = function(field) {
         {...field.input}
         onChange={field.input.onChange}
         time={field.showTime}
-        value={!field.input.value ? null : new Date(field.input.value)}
+        value={!field.input.value ? new Date(field.date) : new Date(field.input.value)}
       />
 
       <div className="help-block">{touched ? error : ''}</div>

@@ -15,14 +15,19 @@ const renderSearchField = field => {
   return (
     <div className={className}>
       <label>{field.label}</label>
-      <input
-        name={field.name}
-        placeholder={field.placeholder ? field.placeholder : ''}
-        className="form-control"
-        type="text"
-        {...field.input} //generate all input events, like equliant to examples of: onChange={field.input.onChange} or onFocus={field.input.onFocus} or onBlur....
-      />
+      <div className="input-group">
 
+        <input
+          name={field.name}
+          placeholder={field.placeholder ? field.placeholder : ''}
+          className="form-control"
+          type="text"
+          {...field.input} //generate all input events, like equliant to examples of: onChange={field.input.onChange} or onFocus={field.input.onFocus} or onBlur....
+        />
+        <span className="input-group-addon">
+          <span className="glyphicon glyphicon-search"></span>
+        </span>
+      </div>
       <div className="help-block">{touched ? error : ''}</div>
     </div>
   );
@@ -37,6 +42,7 @@ class SearchField extends Component {
   searchIngredient(e) {
     this.setState({ foodsearch: e.target.value });
     if (e.target.value) {
+      
       this.props.searchIngredients(e.target.value);
     }
   }
@@ -69,7 +75,7 @@ class SearchField extends Component {
   }
 
   render() {
-    const foodSearch = _.debounce(this.searchIngredient.bind(this), 300);
+    const foodSearch = _.debounce(this.searchIngredient.bind(this), 600);
     return (
       <div className="">
         <div className="row">

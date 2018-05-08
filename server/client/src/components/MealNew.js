@@ -61,6 +61,7 @@ class MealNew extends Component {
               component={renderDateField}
               size="col-xs-10 col-sm-5 col-md-3"
               showTime={true}
+              date={this.props.date}
             />
           </div>
           <Field

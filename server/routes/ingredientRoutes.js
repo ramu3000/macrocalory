@@ -3,8 +3,7 @@ const axios = require('axios');
 
 module.exports = app => {
   app.get('/api/fineli/foods', requireLogin, async (req, res) => {
-    const query = req.query.q;
-
+    const query = encodeURI(req.query.q);
     if (!query) {
       res.status(400).json({
         error: 'no food query was given'
