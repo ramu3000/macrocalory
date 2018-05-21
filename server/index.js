@@ -28,6 +28,9 @@ require('./routes/authRoutes')(app);
 require('./routes/mealRoutes')(app);
 require('./routes/ingredientRoutes')(app);
 require('./routes/waterRoutes')(app);
+require('./routes/syncRoutes')(app);
+require('./routes/heartrate')(app);
+
 
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets

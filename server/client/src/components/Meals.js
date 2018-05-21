@@ -20,7 +20,8 @@ import {
   fetchDailyWater,
   fetchDefaultWaterTarget,
   deleteMeal,
-  chooseDate
+  chooseDate,
+  syncMealToFitbit
 } from '../actions';
 import { Calendar } from 'react-date-range';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
@@ -77,6 +78,9 @@ class Meals extends Component {
   async deleteMeal(meal) {
     await this.props.deleteMeal(meal._id);
     await this.props.fetchDailyMeals(this.props.date);
+  }
+  async syncFitbit(meal) {
+    await this.props.syncMealToFitbit(meal._id);
   }
 
   datepickerOverlay(onChange) {
@@ -214,6 +218,13 @@ class Meals extends Component {
             <Col xs={2}>{energy.toFixed(NUM_OF_DECIMALS)} kcal</Col>
             <Col xs={4} align="right">
               <Button
+                bsSize="xsmall"
+                bsStyle="primary"
+                onClick={() => this.syncFitbit(meal) }
+              >
+              Sync Fitbit
+              </Button>
+              <Button
                 className="btn-meal-list"
                 bsStyle="success"
                 bsSize="xsmall"
@@ -306,5 +317,6 @@ export default connect(mapsStateToProps, {
   fetchDailyMeals,
   fetchDailyWater,
   fetchDefaultWaterTarget,
-  deleteMeal
+  deleteMeal,
+  syncMealToFitbit
 })(Meals);

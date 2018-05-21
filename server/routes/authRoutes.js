@@ -7,6 +7,11 @@ module.exports = app => {
       scope: ['profile', 'email']
     })
   );
+  app.get('/auth/fitbit',
+    passport.authenticate('fitbit', { 
+      scope: ['activity','profile','nutrition', 'heartrate'] }
+    )
+  );
 
   app.get(
     '/auth/google/callback',
@@ -15,6 +20,22 @@ module.exports = app => {
       res.redirect('/');
     }
   );
+  app.get( '/auth/fitbit/callback', 
+    passport.authenticate( 'fitbit', { 
+      successRedirect: '/auth/fitbit/success',
+      failureRedirect: '/auth/fitbit/failure'
+    })
+  );
+  app.get('/auth/fitbit/success',  (req, res)  => {
+    res.json('sucess');
+  
+  });
+
+  app.get('/auth/fitbit/failure',  (req, res)  => {
+    res.json('failure');
+  });
+  
+  
 
   app.get('/api/logout', (req, res) => {
     req.logout();

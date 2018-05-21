@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import { createMeal } from '../actions';
 
@@ -41,7 +41,12 @@ class MealNew extends Component {
     this.props.array.unshift('ingredients', newFoodInfo);
   }
 
+  sumCarbs(){
+    console.log(this.props);
+  }
+
   render() {
+    this.sumCarbs();
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
       <div className="container">
@@ -90,9 +95,10 @@ class MealNew extends Component {
   }
 }
 
+const selector = formValueSelector('mealForm'); //
 //getting props to this component
-function mapsStateToProps({ date, ingredients }) {
-  return { date, ingredients };
+function mapsStateToProps({ date, ingredients,state }) {
+  return { myField: selector(state, 'name'), date, ingredients };
 }
 
 export default reduxForm({

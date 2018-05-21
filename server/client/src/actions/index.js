@@ -15,7 +15,8 @@ import {
   FETCH_TRENDS_MEALS_DATA,
   FETCH_DEFAULT_WATER_TARGET,
   UPDATE_MEAL,
-  FETCH_INGREDIENTS
+  FETCH_INGREDIENTS,
+  SYNC_FITBIT_MEAL
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -153,4 +154,11 @@ export const updateMeal = (mealId, values, callback) => async dispatch => {
 export const searchIngredients = query => async dispatch => {
   const res = await axios.get(`/api/fineli/foods?q=${query}`);
   dispatch({ type: FETCH_INGREDIENTS, payload: res.data });
+};
+
+
+export const syncMealToFitbit = mealid => async dispatch => {
+   
+  const res = await axios.post(`/api/sync/meal/${mealid}`, {});
+  dispatch({ type: SYNC_FITBIT_MEAL, payload: res.data });
 };
