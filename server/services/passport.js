@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FitbitStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy;
+const FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 
@@ -53,12 +53,12 @@ passport.use(
 passport.use(
   new FitbitStrategy(
     {
-      clientID:     keys.FITBIT_CLIENT_ID,
+      clientID: keys.FITBIT_CLIENT_ID,
       clientSecret: keys.FITBIT_CLIENT_SECRET,
       callbackURL: '/auth/fitbit/callback'
     },
     async (accessToken, refreshToken, profile, done) => {
-      const existingUser = await User.findOne({ 'fitbit.id': profile.id});
+      const existingUser = await User.findOne({ 'fitbit.id': profile.id });
       if (existingUser) {
         existingUser.fitbit.access_token = accessToken;
         existingUser.fitbit.refresh_token = refreshToken;

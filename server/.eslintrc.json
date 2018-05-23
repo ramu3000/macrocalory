@@ -20,11 +20,15 @@
         ],
         "quotes": [
             "error",
-            "single"
+            "single",
+            { "avoidEscape": true }
         ],
         "semi": [
             "error",
             "always"
-        ]
-    }
+        ],
+        "prettier/prettier": ["error", { "singleQuote": true }]
+    },
+    "plugins": ["prettier"]
+  
 }
