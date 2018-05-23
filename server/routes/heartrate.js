@@ -18,15 +18,23 @@ module.exports = app => {
       try {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + fitbit.access_token;
         const data = await axios.get(`https://api.fitbit.com/1/user/${fitbit.id}/activities/heart/date/today/1d.json`);
-        console.log(data);
+        console.log(data.data);
         res.status(200).json(data.data);
-      } catch(err) {
-        console.log('error', err);
+      } catch(error) {
+        console.log('MYFUCKING OBJECT', error.response);
+        
+
+        if(error.response.status === 401){
+        
+          res.status(401).send(error.response.data.errors[0].message);
+        }else {
+          res.status(500).json(error.response.data)
+        }
       }
 
     } catch (err) {
       console.log(err);
-      res.status(403).json({error: err})
+      res.status(403).json(err);
     }
   });
 };
