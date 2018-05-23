@@ -28,7 +28,6 @@ module.exports = app => {
       const promises = [];
 
       _.each(ingredients, ingredient => {
-
         const obj = {
           name: ingredient.name,
           defaultFoodMeasurementUnitId: '147',
@@ -46,10 +45,23 @@ module.exports = app => {
         );
       });
 
-      const result = await Promise.all(promises);
-      console.log(result);
+      const results = await Promise.all(promises);
 
-      res.status(200).json(result.data);
+      const fitbitFoodIds = [];
+      let statusFailed = false;
+
+      _.each(results, result => {
+        if (result.status === 201) {
+          fitbitFoodIds.push(result.data.food.foodId);
+        } else {
+          statusFailed = true;
+        }
+      });
+      console.log(fitbitFoodIds);
+
+      if (!statusFailed) {
+        res.status(201).json(results[0].data);
+      }
     } catch (err) {
       res.status(700).json(err);
     }
