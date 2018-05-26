@@ -8,7 +8,8 @@ const userSchema = new Schema({
   fitbit: {
     id: String,
     access_token: String,
-    refresh_token: String
+    refresh_token: String,
+    expires_in: Number
   },
   _water: { type: Schema.Types.ObjectId, ref: 'Water', required: true }
 });

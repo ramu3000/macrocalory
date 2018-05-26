@@ -156,8 +156,7 @@ export const searchIngredients = query => async dispatch => {
   dispatch({ type: FETCH_INGREDIENTS, payload: res.data });
 };
 
-
-export const syncMealToFitbit = mealid => async dispatch => { 
-  const res = await axios.post(`/api/sync/${mealid}`, {});
+export const syncMealToFitbit = mealid => async dispatch => {
+  const res = await axios.get(`/api/sync/${mealid}`, {});
   dispatch({ type: SYNC_FITBIT_MEAL, payload: res.data });
 };

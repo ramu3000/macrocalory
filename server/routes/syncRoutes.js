@@ -9,6 +9,7 @@ const Meal = mongoose.model('meals');
 
 module.exports = app => {
   app.get('/api/sync/:mealId', requireLogin, async (req, res) => {
+    console.log('meal');
     const id = req.params.mealId;
     try {
       const meal = await Meal.findOne({ _id: id, _user: req.user.id }).select(
