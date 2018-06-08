@@ -3,94 +3,151 @@ const requireLogin = require('../middlewares/requireLogin');
 const _ = require('lodash');
 const axios = require('axios');
 const querystring = require('querystring');
+const FitbitApiClient = require('fitbit-node');
+const keys = require('../config/keys');
+
+const client = new FitbitApiClient({
+  clientId: keys.FITBIT_CLIENT_ID,
+  clientSecret: keys.FITBIT_CLIENT_SECRET,
+  apiVersion: '1' // 1.2 is the default
+});
 
 const User = mongoose.model('users');
 const Meal = mongoose.model('meals');
 
 module.exports = app => {
   app.get('/api/sync/:mealId', requireLogin, async (req, res) => {
-    console.log('meal');
-    const id = req.params.mealId;
+    const mealId = req.params.mealId;
+    const user = await getUser(req.user.id);
+    const { fitbit } = user;
+    let { access_token } = fitbit;
+    const meal = await getMealfromDatabase(mealId, req.user.id);
+    const { ingredients } = meal;
+    //TODO: check if foods has fitbit id already, then skip
+    let promises = await saveFoodsToFitbit(ingredients, access_token);
+    let foodResults;
+
     try {
-      const meal = await Meal.findOne({ _id: id, _user: req.user.id }).select(
-        '-__v -_user'
+      foodResults = await Promise.all(promises);
+    } catch (error) {
+      console.log('error resolving promises:', error);
+      res.send(error.response)
+    }
+
+    if (foodResults[0][1].statusCode === 401) {
+      console.log(401)
+      const newToken = await refreshToken(
+        access_token,
+        fitbit.refresh_token,
+        res
       );
-      if (!meal) {
-        res.status(404).json({
-          message: 'Meal with given id does not exist',
-          id: id
-        });
-        return;
+      console.log('newToken', newToken)
+      saveToken(user, newToken);
+      access_token = newToken.access_token
+      promises = await saveFoodsToFitbit(ingredients, access_token);
+    }
+
+    const fitbitFoodIds = [];
+    let statusFailed = false;
+
+    _.each(foodResults, result => {
+      if (result.status === 201) {
+        fitbitFoodIds.push(result.data.food.foodId);
+      } else {
+        statusFailed = true;
       }
-      const { ingredients } = meal;
-      const { fitbit } = await User.findOne({ _id: req.user.id });
-      axios.defaults.headers.common['Authorization'] =
-        'Bearer ' + fitbit.access_token;
+    });
 
-      //TODO: check if foods has fitbit id already, then skip
-      const foodPromises = saveFoodsToFitbit(ingredients);
+    //TODO send
+    const foods = _.map(ingredients, (ingredient, index) => {
+      return {
+        foodId: fitbitFoodIds[index],
+        amount: ingredient.mass
+      };
+    });
 
-      const results = await Promise.all(foodPromises);
+    const loggedFoodsPromise = logFoodsToFitbit(foods, '2018-06-08', access_token);
+    const mealResult = await Promise.all(loggedFoodsPromise);
 
-      const fitbitFoodIds = [];
-      let statusFailed = false;
+    console.log('mealresult', mealResult);
+    res.json({ meal: mealResult });
 
-      _.each(results, result => {
-        if (result.status === 201) {
-          fitbitFoodIds.push(result.data.food.foodId);
-        } else {
-          statusFailed = true;
-        }
-      });
-      console.log(fitbitFoodIds);
+    //console.log(foodResults);
 
-      //TODO send
-      const foods = _.map(ingredients, (ingredient, index) => {
-        return {
-          foodId: fitbitFoodIds[index],
-          amount: ingredient.mass
-        };
-      });
-
-      const loggedFoodsPromise = logFoodsToFitbit(foods, '2018-05-24');
-      const foodResults = await Promise.all(loggedFoodsPromise);
-
-      console.log(foodResults);
-
-      if (!statusFailed) {
-        res.status(201).json(results[0].data);
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err.response.data);
+    if (!statusFailed) {
+      res.status(201).json(mealResult[0].data);
     }
   });
 };
 
-function saveFoodsToFitbit(foods) {
-  const promises = [];
-  _.each(foods, ingredient => {
-    const obj = {
-      name: ingredient.name,
-      defaultFoodMeasurementUnitId: '147',
-      defaultServingSize: '100',
-      calories: ingredient.kcal.toFixed(),
-      protein: ingredient.protein,
-      totalCarbohydrate: ingredient.carbohydrate,
-      totalFat: ingredient.fat
-    };
-    promises.push(
-      axios.post(
-        'https://api.fitbit.com/1/user/-/foods.json',
-        querystring.stringify(obj)
-      )
-    );
-  });
+async function refreshToken(accessToken, refreshToken, res) {
+  let newToken;
+  try {
+    newToken = await client.refreshAccessToken(accessToken, refreshToken);
+  } catch (err) {
+    console.log('refrestokenError:', err);
+    res.status(401).send(err);
+  }
+  return newToken;
+}
 
+function saveToken(user, token) {
+  user.fitbit.access_token = token.access_token;
+  user.fitbit.refresh_token = token.refresh_token;
+  user.fitbit.expires_at = token.expires_at;
+  user.save();
+}
+
+async function getMealfromDatabase(mealid, userid) {
+  try {
+    const meal = await Meal.findOne({ _id: mealid, _user: userid }).select(
+      '-__v -_user'
+    );
+    if (!meal) {
+      res.status(404).json({
+        message: 'Meal with given id does not exist',
+        id: id
+      });
+      return meal;
+    }
+    return meal;
+  } catch (err) {
+    return console.log('no meal in database', err);
+    res.status(500).json(err.response.data);
+  }
+}
+async function getUser(userid) {
+  try {
+    const user = await User.findOne({ _id: userid });
+    return user;
+  } catch (err) {
+    console.log('no user found or error getting user', err);
+  }
+}
+async function saveFoodsToFitbit(foods, accessToken) {
+  const promises = [];
+  try {
+    _.each(foods, ingredient => {
+      const obj = {
+        name: ingredient.name,
+        defaultFoodMeasurementUnitId: '147',
+        defaultServingSize: '100',
+        calories: ingredient.kcal.toFixed(),
+        protein: ingredient.protein,
+        totalCarbohydrate: ingredient.carbohydrate,
+        totalFat: ingredient.fat
+      };
+      promises.push(
+        client.post('/foods.json', accessToken, querystring.stringify(obj))
+      );
+    });
+  } catch (error) {
+    console.log('fitbit promises error:', error);
+  }
   return promises;
 }
 
-function logFoodsToFitbit(foods, date) {
+function logFoodsToFitbit(foods, date, access_token) {
   const mealTypeId = fitbitMealTypeId(12);
 
   const promises = [];
@@ -103,10 +160,11 @@ function logFoodsToFitbit(foods, date) {
       date
     };
     promises.push(
-      axios.post(
-        'https://api.fitbit.com/1/user/-/foods/log.json',
-        querystring.stringify(food)
-      )
+      client.post('/foods/log.json', access_token, querystring.stringify(food))
+    //  axios.post(
+      //  'https://api.fitbit.com/1/user/-/foods/log.json',
+       // querystring.stringify(food)
+     // )
     );
   });
 

@@ -2,9 +2,16 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  googleId: String,
-  email: String,
-  name: String,
+  displayName: String,
+  local: {
+    email: String,
+    password: String
+  },
+  google: {
+    id: String,
+    email: String,
+    name: String
+  },
   fitbit: {
     id: String,
     access_token: String,

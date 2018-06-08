@@ -13,12 +13,14 @@ module.exports = app => {
       const user = await User.findOne({ _id: req.user.id });
       const { fitbit } = user;
 
-      
-      const status = await getHeartRate(fitbit);
-      console.log('status', status);
-      if (status === 401) {
-        refreshToken(user);
+      let heartRateData = await getHeartRate(fitbit);
+      console.log('status', heartRateData);
+      if (heartRateData.status === 401) {
+        const newToken = await refreshToken(user);
+        const updatedUser = await saveTokenToDatabase(newToken.data, user);
+        heartRateData = await getHeartRate(fitbit);
       }
+      res.status(200).json(heartRateData.data);
     } catch (err) {
       console.log(err);
       res.status(403).json(err);
@@ -35,31 +37,31 @@ async function getHeartRate(fitbit) {
         fitbit.id
       }/activities/heart/date/today/1d.json`
     );
-    console.log(data.data);
-    return data.data;
+    console.log('sucess loading heart rate data', data.data);
+    return data.response;
   } catch (error) {
     //console.log('MYFUCKING OBJECT', error.response);
 
     if (error.response.status === 401) {
       console.log('needs to refresh');
-      return error.response.status;
-      //res.status(401).send(error.response.data.errors[0].message);
+      return error.response;
     } else {
-      console.log('lol');
+      console.log('other error',error.response.data);
       res.status(500).json(error.response.data);
     }
   }
 }
 
 async function refreshToken(user) {
-  console.log(user);
+  console.log('user', user);
   const {
     fitbit: { refresh_token }
   } = user;
 
   const userData = {
     grant_type: 'refresh_token',
-    refresh_token: refresh_token
+    refresh_token: refresh_token,
+    expires_in: 120
   };
 
   try {
@@ -67,7 +69,7 @@ async function refreshToken(user) {
     let buff = new Buffer(secret);
     let base64data = buff.toString('base64');
 
-    const data = await axios.post(
+    const newTokenData = await axios.post(
       'https://api.fitbit.com/oauth2/token',
       querystring.stringify(userData),
       {
@@ -76,15 +78,13 @@ async function refreshToken(user) {
         }
       }
     );
-    console.log('newtoken', newTokenData);
-    return;
-    return updateToken(data, user);
+    return newTokenData;
   } catch (err) {
     console.log('error_token_update', err.response.data);
   }
 }
 
-async function updateToken(newTokenData, user) {
+async function saveTokenToDatabase(newTokenData, user) {
   console.log('newtoken', newTokenData);
   try {
     const updatedUser = await User.findOneAndUpdate(
@@ -93,8 +93,9 @@ async function updateToken(newTokenData, user) {
       },
       {
         fitbit: {
-          //refresh_token: newTokenData
-          expires_in: 2
+          access_token: newTokenData.access_token,
+          refresh_token: newTokenData.refresh_token,
+          expires_in: newTokenData.expires_in
         }
       }
     );

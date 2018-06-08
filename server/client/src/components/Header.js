@@ -19,6 +19,7 @@ class Header extends Component {
   }
 
   renderAuthNav() {
+    console.log(this.props.auth);
     if (this.isLoadingAuth()) {
       return null;
     } else if (!this.isLoggedIn()) {
@@ -31,7 +32,7 @@ class Header extends Component {
     return (
       <Nav pullRight>
         <NavItem href="/api/logout">
-          Logout: {this.props.auth.data.name}
+          Logout: {this.props.auth.data.displayName}
         </NavItem>
       </Nav>
     );

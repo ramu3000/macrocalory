@@ -10,6 +10,7 @@ import MealNewComponent from './MealNew';
 import Landing from './Landing';
 import MealEditComponent from './MealEdit';
 import TrendsComponent from './Trends';
+import UserSettingsComponent from './config';
 
 const LoadingSpinner = () => <h2>Checking authentication...</h2>;
 
@@ -27,6 +28,7 @@ const Meals = userIsAuthenticated(MealsComponent);
 const MealNew = userIsAuthenticated(MealNewComponent);
 const MealEdit = userIsAuthenticated(MealEditComponent);
 const Trends = userIsAuthenticated(TrendsComponent);
+const UserSettings = userIsAuthenticated(UserSettingsComponent);
 
 class App extends Component {
   componentDidMount() {
@@ -55,6 +57,7 @@ class App extends Component {
               <Route exact path="/meals/new" component={MealNew} />
               <Route exact path="/meals/edit/:id" component={MealEdit} />
               <Route exact path="/trends" component={Trends} />
+              <Route exact path="/settings" component={UserSettings} />
               <Route path="/" render={() => <Redirect to="/" />} />
             </Switch>
           </div>
