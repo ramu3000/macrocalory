@@ -1,14 +1,20 @@
+# Macrocalory
+## What is Macrocalory?
+It's an app for counting your food calories. It's main purpose for now, is to add support for Finnish foods for fitbit.
+It's started as Kaloriraptorit by a team particimming in programming course which has now ended. I'm continueing by myself and further developing for my own needs.
+
 # Kaloriraptorit
 ## What is Kaloriraptorit?
-* Name of the team participating in the [programming course](https://www.xn--oikeisiintihin-4pb.fi/) organized by [Vincit](https://www.vincit.fi/)
-* Work title of the application developed by the team
+* Name of the team participating in the programming course
+* Work title of the application developed by the team of two.
+
 
 ## What does the application do?
 
 Kaloriraptorit is a simple web application for tracking what you eat. It's nothing very innovative and there are plenty of applications doing the same thing. But the functional requirements are quite easy to understand and they offer a great opportunity to try out some technologies building up a fullstack system.
 
 
-## "Production" environment
+## "Production" environment (repo version is newer, and this will be update soon in heroku)
 * https://afternoon-escarpment-67756.herokuapp.com/
 
 ## Technologies, frameworks, modules and architecture
